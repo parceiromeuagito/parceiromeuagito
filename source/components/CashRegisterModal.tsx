@@ -197,7 +197,7 @@ const CashRegisterModal = ({ isOpen, onClose }: CashRegisterModalProps) => {
                       onChange={(e) => setAmount(e.target.value)}
                       className="w-full px-4 py-2 border border-gray-300 dark:border-zinc-600 bg-white dark:bg-zinc-900 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-zinc-500"
                       placeholder="0.00"
-                      autoFocus
+                      
                     />
                   </div>
                   {action !== 'open' && (

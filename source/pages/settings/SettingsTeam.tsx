@@ -286,7 +286,7 @@ const SettingsTeam = () => {
                                                 if (e.key === 'Enter') handleUpdatePin(member.id, (e.target as HTMLInputElement).value);
                                                 if (e.key === 'Escape') setEditingId(null);
                                             }}
-                                            autoFocus
+                                            
                                         />
                                     ) : (
                                         <button
