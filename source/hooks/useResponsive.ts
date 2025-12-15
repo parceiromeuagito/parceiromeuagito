@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 /**
  * Hook customizado para detectar se a tela é mobile (< 1024px)
@@ -17,10 +17,10 @@ export function useIsMobile() {
     checkMobile();
 
     // Adicionar listener para resize
-    window.addEventListener('resize', checkMobile);
+    window.addEventListener("resize", checkMobile);
 
     // Limpar listener no unmount
-    return () => window.removeEventListener('resize', checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
   // Retornar null enquanto não estiver hidratado
@@ -45,8 +45,8 @@ export function useScreenSize() {
     };
 
     handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   return screenSize;

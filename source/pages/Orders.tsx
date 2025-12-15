@@ -1,20 +1,26 @@
-import { useState, useEffect, useMemo } from 'react';
-import { useOutletContext } from 'react-router-dom';
-import { Order, OrderStatus } from '../types';
-import { formatCurrency, formatDate } from '../lib/utils';
+import { useState, useEffect, useMemo } from "react";
+import { useOutletContext } from "react-router-dom";
+import { Order, OrderStatus } from "../types";
+import { formatCurrency, formatDate } from "../lib/utils";
 import {
   MessageCircle,
-  Calendar as CalendarIcon, BedDouble, Ticket,
-  Check, Zap,
-  LayoutList, Kanban as KanbanIcon, ArrowRight, Lock
-} from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { OrderDetailsModal } from '../components/orders/OrderDetailsModal';
-import { EmptyState } from '../components/ui/EmptyState';
-import { useBusinessStore } from '../store/useBusinessStore';
-import { useOrderStore } from '../store/useOrderStore';
-import { useToast } from '../contexts/ToastContext';
-import { printOrderReceipt } from '../lib/printer';
+  Calendar as CalendarIcon,
+  BedDouble,
+  Ticket,
+  Check,
+  Zap,
+  LayoutList,
+  Kanban as KanbanIcon,
+  ArrowRight,
+  Lock,
+} from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { OrderDetailsModal } from "../components/orders/OrderDetailsModal";
+import { EmptyState } from "../components/ui/EmptyState";
+import { useBusinessStore } from "../store/useBusinessStore";
+import { useOrderStore } from "../store/useOrderStore";
+import { useToast } from "../contexts/ToastContext";
+import { printOrderReceipt } from "../lib/printer";
 
 type OutletContext = {
   setSelectedChatOrder: (order: Order | null) => void;
@@ -22,10 +28,14 @@ type OutletContext = {
   setIsChatSidebarCollapsed: (collapsed: boolean) => void;
 };
 
-import { sortOrdersIntelligently } from '../lib/orderSorting';
+import { sortOrdersIntelligently } from "../lib/orderSorting";
 
 const Orders = () => {
-  const { setSelectedChatOrder, isChatSidebarCollapsed, setIsChatSidebarCollapsed } = useOutletContext<OutletContext>();
+  const {
+    setSelectedChatOrder,
+    isChatSidebarCollapsed,
+    setIsChatSidebarCollapsed,
+  } = useOutletContext<OutletContext>();
   const { config, updateConfig } = useBusinessStore();
   const { orders: rawOrders, updateOrderStatus } = useOrderStore();
 
@@ -34,18 +44,20 @@ const Orders = () => {
 
   const { addToast } = useToast();
 
-  const [viewMode, setViewMode] = useState<'kanban' | 'list' | 'calendar'>('kanban');
-  const [activeTab, setActiveTab] = useState<'active' | 'history'>('active');
+  const [viewMode, setViewMode] = useState<"kanban" | "list" | "calendar">(
+    "kanban",
+  );
+  const [activeTab, setActiveTab] = useState<"active" | "history">("active");
 
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
 
-  const canUseChat = config.plan !== 'starter';
+  const canUseChat = config.plan !== "starter";
 
   useEffect(() => {
     if (config.autoAccept) {
-      const pending = orders.filter(o => o.status === 'pending');
-      pending.forEach(o => {
-        updateOrderStatus(o.id, 'accepted');
+      const pending = orders.filter((o) => o.status === "pending");
+      pending.forEach((o) => {
+        updateOrderStatus(o.id, "accepted");
         if (config.printer.autoPrintOnAccept) {
           try {
             printOrderReceipt(o, config.printer);
@@ -55,7 +67,7 @@ const Orders = () => {
         }
       });
       if (pending.length > 0) {
-        addToast(`${pending.length} pedidos aceitos automaticamente`, 'info');
+        addToast(`${pending.length} pedidos aceitos automaticamente`, "info");
       }
     }
   }, [config.autoAccept, orders, config.printer]);
@@ -63,26 +75,31 @@ const Orders = () => {
   const handleStatusChange = (id: string, newStatus: OrderStatus) => {
     updateOrderStatus(id, newStatus);
 
-    if (newStatus === 'accepted' && config.printer.autoPrintOnAccept) {
-      const orderToPrint = orders.find(o => o.id === id);
+    if (newStatus === "accepted" && config.printer.autoPrintOnAccept) {
+      const orderToPrint = orders.find((o) => o.id === id);
       if (orderToPrint) {
         printOrderReceipt(orderToPrint, config.printer);
-        addToast('Enviado para impressão automática', 'info');
+        addToast("Enviado para impressão automática", "info");
       }
     }
 
     const statusMessages = {
-      accepted: 'Solicitação aceita!',
-      preparing: 'Iniciado preparo/atendimento.',
-      ready: 'Marcado como pronto.',
-      delivering: 'Saiu para entrega/check-in.',
-      completed: 'Pedido finalizado.',
-      rejected: 'Solicitação recusada.',
-      pending: 'Retornado para pendente.',
-      cancelled: 'Pedido cancelado.'
+      accepted: "Solicitação aceita!",
+      preparing: "Iniciado preparo/atendimento.",
+      ready: "Marcado como pronto.",
+      delivering: "Saiu para entrega/check-in.",
+      completed: "Pedido finalizado.",
+      rejected: "Solicitação recusada.",
+      pending: "Retornado para pendente.",
+      cancelled: "Pedido cancelado.",
     };
 
-    addToast(statusMessages[newStatus] || 'Status atualizado.', newStatus === 'rejected' || newStatus === 'cancelled' ? 'error' : 'success');
+    addToast(
+      statusMessages[newStatus] || "Status atualizado.",
+      newStatus === "rejected" || newStatus === "cancelled"
+        ? "error"
+        : "success",
+    );
   };
 
   const openChat = (e: React.MouseEvent, order: Order) => {
@@ -99,7 +116,8 @@ const Orders = () => {
     setSelectedChatOrder(order);
   };
 
-  const [selectedOrderForDetails, setSelectedOrderForDetails] = useState<Order | null>(null);
+  const [selectedOrderForDetails, setSelectedOrderForDetails] =
+    useState<Order | null>(null);
 
   const openDetails = (order: Order) => {
     setSelectedOrderForDetails(order);
@@ -108,25 +126,31 @@ const Orders = () => {
 
   const renderSpecificDetails = (order: Order) => {
     switch (order.type) {
-      case 'hotel':
+      case "hotel":
         return (
           <div className="flex items-center gap-2 text-xs text-zinc-400 mt-2 bg-zinc-800/50 p-1.5 rounded border border-zinc-700">
             <BedDouble className="w-3 h-3" />
-            {order.checkIn ? formatDate(new Date(order.checkIn)).split(' ')[0] : 'N/A'} • {order.items[0].quantity} Noites
+            {order.checkIn
+              ? formatDate(new Date(order.checkIn)).split(" ")[0]
+              : "N/A"}{" "}
+            • {order.items[0].quantity} Noites
           </div>
         );
-      case 'reservation':
+      case "reservation":
         return (
           <div className="flex items-center gap-2 text-xs text-zinc-400 mt-2 bg-zinc-800/50 p-1.5 rounded border border-zinc-700">
             <CalendarIcon className="w-3 h-3" />
-            {order.schedulingDate ? formatDate(new Date(order.schedulingDate)) : 'Hoje'} • {order.guests || 2} Pessoas
+            {order.schedulingDate
+              ? formatDate(new Date(order.schedulingDate))
+              : "Hoje"}{" "}
+            • {order.guests || 2} Pessoas
           </div>
         );
-      case 'tickets':
+      case "tickets":
         return (
           <div className="flex items-center gap-2 text-xs text-zinc-400 mt-2 bg-zinc-800/50 p-1.5 rounded border border-zinc-700">
             <Ticket className="w-3 h-3" />
-            Assento: {order.seatNumber || 'Geral'}
+            Assento: {order.seatNumber || "Geral"}
           </div>
         );
       default:
@@ -134,32 +158,66 @@ const Orders = () => {
     }
   };
 
-  const pendingOrders = orders.filter(o => o.status === 'pending');
-  const activeOrders = orders.filter(o => ['accepted', 'preparing', 'ready', 'delivering'].includes(o.status));
-  const historyOrders = orders.filter(o => ['completed', 'cancelled', 'rejected'].includes(o.status));
+  const pendingOrders = orders.filter((o) => o.status === "pending");
+  const activeOrders = orders.filter((o) =>
+    ["accepted", "preparing", "ready", "delivering"].includes(o.status),
+  );
+  const historyOrders = orders.filter((o) =>
+    ["completed", "cancelled", "rejected"].includes(o.status),
+  );
 
-  const kanbanColumns: { id: OrderStatus; label: string; color: string; borderColor: string }[] = [
-    { id: 'accepted', label: 'A Fazer / Aceitos', color: 'text-primary', borderColor: 'border-primary' },
-    { id: 'preparing', label: 'Em Preparo', color: 'text-amber-500', borderColor: 'border-amber-500' },
-    { id: 'ready', label: 'Pronto', color: 'text-green-500', borderColor: 'border-green-500' },
-    { id: 'delivering', label: 'Entrega / Check-in', color: 'text-purple-500', borderColor: 'border-purple-500' },
+  const kanbanColumns: {
+    id: OrderStatus;
+    label: string;
+    color: string;
+    borderColor: string;
+  }[] = [
+    {
+      id: "accepted",
+      label: "A Fazer / Aceitos",
+      color: "text-primary",
+      borderColor: "border-primary",
+    },
+    {
+      id: "preparing",
+      label: "Em Preparo",
+      color: "text-amber-500",
+      borderColor: "border-amber-500",
+    },
+    {
+      id: "ready",
+      label: "Pronto",
+      color: "text-green-500",
+      borderColor: "border-green-500",
+    },
+    {
+      id: "delivering",
+      label: "Entrega / Check-in",
+      color: "text-purple-500",
+      borderColor: "border-purple-500",
+    },
   ];
 
   // --- CALENDAR VIEW RENDERER ---
   const renderCalendarView = () => {
     // Agrupa pedidos por data
-    const ordersByDate = activeOrders.reduce((acc, order) => {
-      const date = order.checkIn || order.schedulingDate || order.createdAt;
-      const dateKey = new Date(date).toLocaleDateString('pt-BR');
-      if (!acc[dateKey]) acc[dateKey] = [];
-      acc[dateKey].push(order);
-      return acc;
-    }, {} as Record<string, Order[]>);
+    const ordersByDate = activeOrders.reduce(
+      (acc, order) => {
+        const date = order.checkIn || order.schedulingDate || order.createdAt;
+        const dateKey = new Date(date).toLocaleDateString("pt-BR");
+        if (!acc[dateKey]) acc[dateKey] = [];
+        acc[dateKey].push(order);
+        return acc;
+      },
+      {} as Record<string, Order[]>,
+    );
 
     const sortedDates = Object.keys(ordersByDate).sort((a, b) => {
-      const [da, ma, ya] = a.split('/').map(Number);
-      const [db, mb, yb] = b.split('/').map(Number);
-      return new Date(ya, ma - 1, da).getTime() - new Date(yb, mb - 1, db).getTime();
+      const [da, ma, ya] = a.split("/").map(Number);
+      const [db, mb, yb] = b.split("/").map(Number);
+      return (
+        new Date(ya, ma - 1, da).getTime() - new Date(yb, mb - 1, db).getTime()
+      );
     });
 
     return (
@@ -173,31 +231,51 @@ const Orders = () => {
             />
           </div>
         ) : (
-          sortedDates.map(date => (
+          sortedDates.map((date) => (
             <div key={date} className="mb-8">
               <h3 className="text-lg font-bold text-white mb-4 sticky top-0 bg-zinc-950 py-2 z-10 flex items-center gap-2">
                 <CalendarIcon className="w-5 h-5 text-primary" />
                 {date}
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-                {ordersByDate[date].map(order => (
+                {ordersByDate[date].map((order) => (
                   <div
                     key={order.id}
                     onClick={() => openDetails(order)}
                     className="bg-zinc-900 p-4 rounded-xl border border-zinc-800 shadow-sm hover:shadow-md hover:border-zinc-700 transition-all cursor-pointer flex gap-4"
                   >
                     <div className="flex-col items-center justify-center px-3 py-2 bg-zinc-800 rounded-lg text-primary hidden sm:flex">
-                      <span className="text-xs font-bold uppercase">{new Date(order.checkIn || order.schedulingDate || order.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                      <span className="text-xs font-bold uppercase">
+                        {new Date(
+                          order.checkIn ||
+                            order.schedulingDate ||
+                            order.createdAt,
+                        ).toLocaleTimeString([], {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </span>
                     </div>
                     <div className="flex-1">
                       <div className="flex justify-between items-start mb-1">
-                        <h4 className="font-bold text-zinc-200">{order.customerName}</h4>
-                        <span className={`text-[10px] px-2 py-0.5 rounded-full uppercase font-bold ${order.status === 'accepted' ? 'bg-primary/20 text-primary' : 'bg-green-900/20 text-green-400'
-                          }`}>
+                        <h4 className="font-bold text-zinc-200">
+                          {order.customerName}
+                        </h4>
+                        <span
+                          className={`text-[10px] px-2 py-0.5 rounded-full uppercase font-bold ${
+                            order.status === "accepted"
+                              ? "bg-primary/20 text-primary"
+                              : "bg-green-900/20 text-green-400"
+                          }`}
+                        >
                           {order.status}
                         </span>
                       </div>
-                      <p className="text-sm text-zinc-500 mb-2">{order.items[0].name} {order.items.length > 1 && `+ ${order.items.length - 1}`}</p>
+                      <p className="text-sm text-zinc-500 mb-2">
+                        {order.items[0].name}{" "}
+                        {order.items.length > 1 &&
+                          `+ ${order.items.length - 1}`}
+                      </p>
                       {renderSpecificDetails(order)}
                     </div>
                   </div>
@@ -223,54 +301,59 @@ const Orders = () => {
             if (isChatSidebarCollapsed) {
               setIsChatSidebarCollapsed(false);
             }
-          }
-          else addToast("Chat disponível apenas no plano Pro ou superior", "warning");
+          } else
+            addToast(
+              "Chat disponível apenas no plano Pro ou superior",
+              "warning",
+            );
         }}
       />
 
       {/* Header da Página */}
       <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-6 shrink-0">
         <div>
-          <h2 className="text-2xl font-bold text-white">Gestão de Solicitações</h2>
+          <h2 className="text-2xl font-bold text-white">
+            Gestão de Solicitações
+          </h2>
           <div className="flex items-center gap-4 mt-1">
             <div className="flex bg-zinc-900 p-1 rounded-lg border border-zinc-800">
               <button
-                onClick={() => setActiveTab('active')}
-                className={`px-3 py-1.5 rounded-md text-sm font-medium transition-all ${activeTab === 'active' ? 'bg-zinc-800 text-white shadow-sm' : 'text-zinc-400 hover:text-zinc-200'}`}
+                onClick={() => setActiveTab("active")}
+                className={`px-3 py-1.5 rounded-md text-sm font-medium transition-all ${activeTab === "active" ? "bg-zinc-800 text-white shadow-sm" : "text-zinc-400 hover:text-zinc-200"}`}
               >
                 Em Andamento
               </button>
               <button
-                onClick={() => setActiveTab('history')}
-                className={`px-3 py-1.5 rounded-md text-sm font-medium transition-all ${activeTab === 'history' ? 'bg-zinc-800 text-white shadow-sm' : 'text-zinc-400 hover:text-zinc-200'}`}
+                onClick={() => setActiveTab("history")}
+                className={`px-3 py-1.5 rounded-md text-sm font-medium transition-all ${activeTab === "history" ? "bg-zinc-800 text-white shadow-sm" : "text-zinc-400 hover:text-zinc-200"}`}
               >
                 Histórico
               </button>
             </div>
 
-            {activeTab === 'active' && (
+            {activeTab === "active" && (
               <div className="h-6 w-px bg-zinc-800 hidden lg:block"></div>
             )}
 
-            {activeTab === 'active' && (
+            {activeTab === "active" && (
               <div className="flex bg-zinc-900 p-1 rounded-lg border border-zinc-800 hidden lg:flex">
                 <button
-                  onClick={() => setViewMode('kanban')}
-                  className={`p-1.5 rounded-md transition-all ${viewMode === 'kanban' ? 'bg-zinc-800 text-primary shadow-sm' : 'text-zinc-400 hover:text-zinc-200'}`}
+                  onClick={() => setViewMode("kanban")}
+                  className={`p-1.5 rounded-md transition-all ${viewMode === "kanban" ? "bg-zinc-800 text-primary shadow-sm" : "text-zinc-400 hover:text-zinc-200"}`}
                   title="Visualização Kanban"
                 >
                   <KanbanIcon className="w-4 h-4" />
                 </button>
                 <button
-                  onClick={() => setViewMode('list')}
-                  className={`p-1.5 rounded-md transition-all ${viewMode === 'list' ? 'bg-zinc-800 text-primary shadow-sm' : 'text-zinc-400 hover:text-zinc-200'}`}
+                  onClick={() => setViewMode("list")}
+                  className={`p-1.5 rounded-md transition-all ${viewMode === "list" ? "bg-zinc-800 text-primary shadow-sm" : "text-zinc-400 hover:text-zinc-200"}`}
                   title="Visualização Lista"
                 >
                   <LayoutList className="w-4 h-4" />
                 </button>
                 <button
-                  onClick={() => setViewMode('calendar')}
-                  className={`p-1.5 rounded-md transition-all ${viewMode === 'calendar' ? 'bg-zinc-800 text-primary shadow-sm' : 'text-zinc-400 hover:text-zinc-200'}`}
+                  onClick={() => setViewMode("calendar")}
+                  className={`p-1.5 rounded-md transition-all ${viewMode === "calendar" ? "bg-zinc-800 text-primary shadow-sm" : "text-zinc-400 hover:text-zinc-200"}`}
                   title="Visualização Calendário"
                 >
                   <CalendarIcon className="w-4 h-4" />
@@ -282,12 +365,18 @@ const Orders = () => {
 
         <div className="flex items-center gap-3 w-full lg:w-auto">
           <label className="flex items-center gap-2 cursor-pointer bg-zinc-900 border border-zinc-800 px-3 py-2 rounded-xl shadow-sm hover:bg-zinc-800 transition-colors">
-            <div className={`p-1.5 rounded-full ${config.autoAccept ? 'bg-yellow-900/30 text-yellow-500' : 'bg-zinc-800 text-zinc-500'}`}>
+            <div
+              className={`p-1.5 rounded-full ${config.autoAccept ? "bg-yellow-900/30 text-yellow-500" : "bg-zinc-800 text-zinc-500"}`}
+            >
               <Zap className="w-4 h-4 fill-current" />
             </div>
             <div className="flex flex-col">
-              <span className="text-xs font-bold text-zinc-300">Auto-Aceite</span>
-              <span className="text-[10px] text-zinc-500">{config.autoAccept ? 'Ativado' : 'Desativado'}</span>
+              <span className="text-xs font-bold text-zinc-300">
+                Auto-Aceite
+              </span>
+              <span className="text-[10px] text-zinc-500">
+                {config.autoAccept ? "Ativado" : "Desativado"}
+              </span>
             </div>
             <input
               type="checkbox"
@@ -295,7 +384,12 @@ const Orders = () => {
               checked={config.autoAccept}
               onChange={(e) => {
                 updateConfig({ autoAccept: e.target.checked });
-                addToast(e.target.checked ? 'Aceite automático ativado' : 'Aceite automático desativado', 'warning');
+                addToast(
+                  e.target.checked
+                    ? "Aceite automático ativado"
+                    : "Aceite automático desativado",
+                  "warning",
+                );
               }}
             />
           </label>
@@ -303,56 +397,68 @@ const Orders = () => {
       </div>
 
       <div className="flex-1 overflow-hidden flex flex-col">
-
-        {activeTab === 'active' && !config.autoAccept && pendingOrders.length > 0 && (
-          <div className="mb-6 shrink-0">
-            <h3 className="text-sm font-bold text-zinc-300 mb-3 flex items-center gap-2 uppercase tracking-wider">
-              <div className="w-2 h-2 bg-yellow-500 rounded-full animate-pulse"></div>
-              Novas Solicitações ({pendingOrders.length})
-            </h3>
-            <div className="flex gap-4 overflow-x-auto pb-2 custom-scrollbar">
-              <AnimatePresence>
-                {pendingOrders.map((order) => (
-                  <motion.div
-                    key={order.id}
-                    layoutId={order.id}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, scale: 0.9 }}
-                    className="min-w-[300px] md:min-w-[350px] bg-zinc-900 p-4 rounded-xl border-l-4 border-yellow-500 shadow-sm hover:shadow-md transition-all cursor-pointer border-y border-r border-zinc-800"
-                    onClick={() => openDetails(order)}
-                  >
-                    <div className="flex justify-between items-start mb-2">
-                      <span className="font-bold text-white">{order.customerName}</span>
-                      <span className="text-xs font-bold bg-primary/10 text-primary px-2 py-0.5 rounded uppercase">{order.type}</span>
-                    </div>
-                    <p className="text-sm text-zinc-400 mb-3 line-clamp-1">
-                      {order.items.map(i => `${i.quantity}x ${i.name}`).join(', ')}
-                    </p>
-                    <div className="flex gap-2 mt-2">
-                      <button
-                        onClick={(e) => { e.stopPropagation(); handleStatusChange(order.id, 'rejected'); }}
-                        className="flex-1 py-1.5 border border-red-900/50 text-red-500 rounded-lg text-xs font-bold hover:bg-red-900/20"
-                      >
-                        Recusar
-                      </button>
-                      <button
-                        onClick={(e) => { e.stopPropagation(); handleStatusChange(order.id, 'accepted'); }}
-                        className="flex-1 py-1.5 bg-green-600 text-white rounded-lg text-xs font-bold hover:bg-green-700 shadow-sm"
-                      >
-                        Aceitar
-                      </button>
-                    </div>
-                  </motion.div>
-                ))}
-              </AnimatePresence>
+        {activeTab === "active" &&
+          !config.autoAccept &&
+          pendingOrders.length > 0 && (
+            <div className="mb-6 shrink-0">
+              <h3 className="text-sm font-bold text-zinc-300 mb-3 flex items-center gap-2 uppercase tracking-wider">
+                <div className="w-2 h-2 bg-yellow-500 rounded-full animate-pulse"></div>
+                Novas Solicitações ({pendingOrders.length})
+              </h3>
+              <div className="flex gap-4 overflow-x-auto pb-2 custom-scrollbar">
+                <AnimatePresence>
+                  {pendingOrders.map((order) => (
+                    <motion.div
+                      key={order.id}
+                      layoutId={order.id}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, scale: 0.9 }}
+                      className="min-w-[300px] md:min-w-[350px] bg-zinc-900 p-4 rounded-xl border-l-4 border-yellow-500 shadow-sm hover:shadow-md transition-all cursor-pointer border-y border-r border-zinc-800"
+                      onClick={() => openDetails(order)}
+                    >
+                      <div className="flex justify-between items-start mb-2">
+                        <span className="font-bold text-white">
+                          {order.customerName}
+                        </span>
+                        <span className="text-xs font-bold bg-primary/10 text-primary px-2 py-0.5 rounded uppercase">
+                          {order.type}
+                        </span>
+                      </div>
+                      <p className="text-sm text-zinc-400 mb-3 line-clamp-1">
+                        {order.items
+                          .map((i) => `${i.quantity}x ${i.name}`)
+                          .join(", ")}
+                      </p>
+                      <div className="flex gap-2 mt-2">
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleStatusChange(order.id, "rejected");
+                          }}
+                          className="flex-1 py-1.5 border border-red-900/50 text-red-500 rounded-lg text-xs font-bold hover:bg-red-900/20"
+                        >
+                          Recusar
+                        </button>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleStatusChange(order.id, "accepted");
+                          }}
+                          className="flex-1 py-1.5 bg-green-600 text-white rounded-lg text-xs font-bold hover:bg-green-700 shadow-sm"
+                        >
+                          Aceitar
+                        </button>
+                      </div>
+                    </motion.div>
+                  ))}
+                </AnimatePresence>
+              </div>
             </div>
-          </div>
-        )}
+          )}
 
         <div className="flex-1 overflow-hidden bg-zinc-900/30 rounded-2xl border border-zinc-800 p-1 relative">
-
-          {activeTab === 'history' ? (
+          {activeTab === "history" ? (
             <div className="h-full overflow-y-auto p-4 custom-scrollbar">
               <table className="w-full text-left border-collapse">
                 <thead>
@@ -378,21 +484,39 @@ const Orders = () => {
                       </td>
                     </tr>
                   ) : (
-                    historyOrders.map(order => (
-                      <tr key={order.id} className="border-b border-zinc-800 hover:bg-zinc-800/50 transition-colors">
-                        <td className="px-4 py-3 font-mono text-zinc-500">{order.id}</td>
-                        <td className="px-4 py-3 font-medium text-zinc-200">{order.customerName}</td>
+                    historyOrders.map((order) => (
+                      <tr
+                        key={order.id}
+                        className="border-b border-zinc-800 hover:bg-zinc-800/50 transition-colors"
+                      >
+                        <td className="px-4 py-3 font-mono text-zinc-500">
+                          {order.id}
+                        </td>
+                        <td className="px-4 py-3 font-medium text-zinc-200">
+                          {order.customerName}
+                        </td>
                         <td className="px-4 py-3">
                           <span className="text-[10px] font-bold uppercase bg-zinc-800 text-zinc-400 px-2 py-1 rounded">
                             {order.type}
                           </span>
                         </td>
-                        <td className="px-4 py-3 text-zinc-500">{formatDate(new Date(order.createdAt))}</td>
-                        <td className="px-4 py-3 font-medium text-zinc-200">{formatCurrency(order.total)}</td>
+                        <td className="px-4 py-3 text-zinc-500">
+                          {formatDate(new Date(order.createdAt))}
+                        </td>
+                        <td className="px-4 py-3 font-medium text-zinc-200">
+                          {formatCurrency(order.total)}
+                        </td>
                         <td className="px-4 py-3">
-                          <span className={`text-xs font-bold px-2 py-1 rounded-full ${order.status === 'completed' ? 'bg-green-900/20 text-green-400' : 'bg-red-900/20 text-red-400'
-                            }`}>
-                            {order.status === 'completed' ? 'Concluído' : 'Cancelado'}
+                          <span
+                            className={`text-xs font-bold px-2 py-1 rounded-full ${
+                              order.status === "completed"
+                                ? "bg-green-900/20 text-green-400"
+                                : "bg-red-900/20 text-red-400"
+                            }`}
+                          >
+                            {order.status === "completed"
+                              ? "Concluído"
+                              : "Cancelado"}
                           </span>
                         </td>
                         <td className="px-4 py-3 text-right">
@@ -417,23 +541,32 @@ const Orders = () => {
                 description="Aguardando novos pedidos. Eles aparecerão aqui automaticamente."
               />
             </div>
-          ) : viewMode === 'calendar' ? (
+          ) : viewMode === "calendar" ? (
             renderCalendarView()
-          ) : viewMode === 'kanban' ? (
+          ) : viewMode === "kanban" ? (
             <div className="h-full overflow-x-auto overflow-y-hidden flex gap-4 p-4 custom-scrollbar">
-              {kanbanColumns.map(col => {
-                const colOrders = activeOrders.filter(o => o.status === col.id);
+              {kanbanColumns.map((col) => {
+                const colOrders = activeOrders.filter(
+                  (o) => o.status === col.id,
+                );
                 return (
-                  <div key={col.id} className="flex-1 min-w-[280px] max-w-[350px] flex flex-col h-full">
-                    <div className={`flex items-center justify-between p-3 rounded-t-xl border-b border-zinc-800 bg-zinc-900 mb-2 shadow-sm`}>
-                      <span className={`font-bold text-sm ${col.color}`}>{col.label}</span>
+                  <div
+                    key={col.id}
+                    className="flex-1 min-w-[280px] max-w-[350px] flex flex-col h-full"
+                  >
+                    <div
+                      className={`flex items-center justify-between p-3 rounded-t-xl border-b border-zinc-800 bg-zinc-900 mb-2 shadow-sm`}
+                    >
+                      <span className={`font-bold text-sm ${col.color}`}>
+                        {col.label}
+                      </span>
                       <span className="text-xs font-bold bg-zinc-800 text-zinc-400 px-2 py-0.5 rounded-full">
                         {colOrders.length}
                       </span>
                     </div>
 
                     <div className="flex-1 overflow-y-auto space-y-3 pr-1 custom-scrollbar pb-4">
-                      {colOrders.map(order => (
+                      {colOrders.map((order) => (
                         <motion.div
                           layoutId={order.id}
                           key={order.id}
@@ -441,14 +574,20 @@ const Orders = () => {
                           className={`bg-zinc-900 p-4 rounded-xl border-l-2 ${col.borderColor} border-y border-r border-zinc-800 shadow-sm hover:shadow-md hover:border-zinc-700 transition-all cursor-pointer group relative`}
                         >
                           <div className="flex justify-between items-start mb-2">
-                            <h4 className="font-bold text-zinc-200 text-sm">{order.customerName}</h4>
-                            <span className="text-[10px] text-zinc-500 font-mono">{order.id}</span>
+                            <h4 className="font-bold text-zinc-200 text-sm">
+                              {order.customerName}
+                            </h4>
+                            <span className="text-[10px] text-zinc-500 font-mono">
+                              {order.id}
+                            </span>
                           </div>
 
                           <div className="text-xs text-zinc-500 mb-3 space-y-1">
                             {order.items.map((item, idx) => (
                               <div key={idx} className="flex justify-between">
-                                <span>{item.quantity}x {item.name}</span>
+                                <span>
+                                  {item.quantity}x {item.name}
+                                </span>
                               </div>
                             ))}
                           </div>
@@ -459,12 +598,24 @@ const Orders = () => {
                             <div className="relative">
                               <button
                                 onClick={(e) => openChat(e, order)}
-                                className={`p-1.5 rounded-lg transition-colors relative flex items-center gap-1 ${!canUseChat ? 'text-zinc-600 cursor-not-allowed' :
-                                  order.chatHistory.length > 0 ? 'text-primary hover:bg-primary/10' : 'text-zinc-500 hover:bg-zinc-800'
-                                  }`}
+                                className={`p-1.5 rounded-lg transition-colors relative flex items-center gap-1 ${
+                                  !canUseChat
+                                    ? "text-zinc-600 cursor-not-allowed"
+                                    : order.chatHistory.length > 0
+                                      ? "text-primary hover:bg-primary/10"
+                                      : "text-zinc-500 hover:bg-zinc-800"
+                                }`}
                               >
-                                {canUseChat ? <MessageCircle className="w-4 h-4" /> : <Lock className="w-3 h-3" />}
-                                {!canUseChat && <span className="text-[10px] font-bold">Pro</span>}
+                                {canUseChat ? (
+                                  <MessageCircle className="w-4 h-4" />
+                                ) : (
+                                  <Lock className="w-3 h-3" />
+                                )}
+                                {!canUseChat && (
+                                  <span className="text-[10px] font-bold">
+                                    Pro
+                                  </span>
+                                )}
 
                                 {canUseChat && order.chatHistory.length > 0 && (
                                   <span className="absolute top-1 right-1 w-1.5 h-1.5 bg-red-500 rounded-full"></span>
@@ -473,11 +624,16 @@ const Orders = () => {
                             </div>
 
                             <div className="flex gap-1">
-                              {col.id !== 'delivering' && (
+                              {col.id !== "delivering" && (
                                 <button
                                   onClick={(e) => {
                                     e.stopPropagation();
-                                    const nextStatus = col.id === 'accepted' ? 'preparing' : col.id === 'preparing' ? 'ready' : 'delivering';
+                                    const nextStatus =
+                                      col.id === "accepted"
+                                        ? "preparing"
+                                        : col.id === "preparing"
+                                          ? "ready"
+                                          : "delivering";
                                     handleStatusChange(order.id, nextStatus);
                                   }}
                                   className="flex items-center gap-1 px-2 py-1 bg-zinc-800 text-zinc-300 rounded-lg text-xs font-bold hover:bg-zinc-700 hover:text-white transition-colors"
@@ -485,9 +641,12 @@ const Orders = () => {
                                   Avançar <ArrowRight className="w-3 h-3" />
                                 </button>
                               )}
-                              {col.id === 'delivering' && (
+                              {col.id === "delivering" && (
                                 <button
-                                  onClick={(e) => { e.stopPropagation(); handleStatusChange(order.id, 'completed'); }}
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleStatusChange(order.id, "completed");
+                                  }}
                                   className="flex items-center gap-1 px-2 py-1 bg-green-600 text-white rounded-lg text-xs font-bold hover:bg-green-700 transition-colors"
                                 >
                                   Concluir <Check className="w-3 h-3" />
@@ -511,30 +670,58 @@ const Orders = () => {
                   className="bg-zinc-900 p-5 rounded-xl border border-zinc-800 shadow-sm hover:shadow-md transition-all cursor-pointer"
                 >
                   <div className="flex justify-between items-start mb-3">
-                    <span className={`px-2 py-1 rounded text-xs font-bold uppercase tracking-wider
-                      ${order.status === 'accepted' ? 'bg-primary/20 text-primary' :
-                        order.status === 'preparing' ? 'bg-amber-900/20 text-amber-500' :
-                          order.status === 'ready' ? 'bg-green-900/20 text-green-500' :
-                            'bg-purple-900/20 text-purple-500'}`}>
-                      {order.status === 'delivering' ? 'Em Entrega' : order.status}
+                    <span
+                      className={`px-2 py-1 rounded text-xs font-bold uppercase tracking-wider
+                      ${
+                        order.status === "accepted"
+                          ? "bg-primary/20 text-primary"
+                          : order.status === "preparing"
+                            ? "bg-amber-900/20 text-amber-500"
+                            : order.status === "ready"
+                              ? "bg-green-900/20 text-green-500"
+                              : "bg-purple-900/20 text-purple-500"
+                      }`}
+                    >
+                      {order.status === "delivering"
+                        ? "Em Entrega"
+                        : order.status}
                     </span>
-                    <span className="text-xs font-bold text-zinc-500">{formatCurrency(order.total)}</span>
+                    <span className="text-xs font-bold text-zinc-500">
+                      {formatCurrency(order.total)}
+                    </span>
                   </div>
-                  <h4 className="font-bold text-zinc-200 mb-1">{order.customerName}</h4>
+                  <h4 className="font-bold text-zinc-200 mb-1">
+                    {order.customerName}
+                  </h4>
                   <p className="text-sm text-zinc-500 mb-4 line-clamp-2">
-                    {order.items.map(i => `${i.quantity}x ${i.name}`).join(', ')}
+                    {order.items
+                      .map((i) => `${i.quantity}x ${i.name}`)
+                      .join(", ")}
                   </p>
                   <div className="flex gap-2">
                     <button
                       onClick={(e) => openChat(e, order)}
-                      className={`flex-1 py-2 border border-zinc-800 rounded-lg text-sm font-medium flex items-center justify-center gap-2 ${!canUseChat ? 'bg-zinc-900 text-zinc-600' : 'hover:bg-zinc-800 text-zinc-300'}`}
+                      className={`flex-1 py-2 border border-zinc-800 rounded-lg text-sm font-medium flex items-center justify-center gap-2 ${!canUseChat ? "bg-zinc-900 text-zinc-600" : "hover:bg-zinc-800 text-zinc-300"}`}
                     >
-                      {canUseChat ? 'Chat' : <><Lock className="w-3 h-3" /> Chat (Pro)</>}
+                      {canUseChat ? (
+                        "Chat"
+                      ) : (
+                        <>
+                          <Lock className="w-3 h-3" /> Chat (Pro)
+                        </>
+                      )}
                     </button>
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
-                        const next = order.status === 'accepted' ? 'preparing' : order.status === 'preparing' ? 'ready' : order.status === 'ready' ? 'delivering' : 'completed';
+                        const next =
+                          order.status === "accepted"
+                            ? "preparing"
+                            : order.status === "preparing"
+                              ? "ready"
+                              : order.status === "ready"
+                                ? "delivering"
+                                : "completed";
                         handleStatusChange(order.id, next);
                       }}
                       className="flex-1 py-2 bg-primary text-white rounded-lg text-sm font-medium hover:bg-primary/90"

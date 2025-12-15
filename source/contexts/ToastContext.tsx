@@ -1,8 +1,8 @@
-import React, { createContext, useContext, useState, useCallback } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
-import { CheckCircle2, XCircle, AlertTriangle, Info, X } from 'lucide-react';
+import React, { createContext, useContext, useState, useCallback } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { CheckCircle2, XCircle, AlertTriangle, Info, X } from "lucide-react";
 
-export type ToastType = 'success' | 'error' | 'warning' | 'info';
+export type ToastType = "success" | "error" | "warning" | "info";
 
 interface Toast {
   id: string;
@@ -19,13 +19,16 @@ const ToastContext = createContext<ToastContextType | undefined>(undefined);
 export const ToastProvider = ({ children }: { children: React.ReactNode }) => {
   const [toasts, setToasts] = useState<Toast[]>([]);
 
-  const addToast = useCallback((message: string, type: ToastType = 'success') => {
-    const id = Math.random().toString(36).substring(7);
-    setToasts((prev) => [...prev, { id, type, message }]);
-    setTimeout(() => {
-      setToasts((prev) => prev.filter((t) => t.id !== id));
-    }, 3000);
-  }, []);
+  const addToast = useCallback(
+    (message: string, type: ToastType = "success") => {
+      const id = Math.random().toString(36).substring(7);
+      setToasts((prev) => [...prev, { id, type, message }]);
+      setTimeout(() => {
+        setToasts((prev) => prev.filter((t) => t.id !== id));
+      }, 3000);
+    },
+    [],
+  );
 
   const removeToast = (id: string) => {
     setToasts((prev) => prev.filter((t) => t.id !== id));
@@ -45,7 +48,13 @@ export const ToastProvider = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-const ToastItem = ({ toast, onRemove }: { toast: Toast; onRemove: (id: string) => void }) => {
+const ToastItem = ({
+  toast,
+  onRemove,
+}: {
+  toast: Toast;
+  onRemove: (id: string) => void;
+}) => {
   const icons = {
     success: <CheckCircle2 className="w-5 h-5 text-green-500" />,
     error: <XCircle className="w-5 h-5 text-red-500" />,
@@ -54,10 +63,10 @@ const ToastItem = ({ toast, onRemove }: { toast: Toast; onRemove: (id: string) =
   };
 
   const bgColors = {
-    success: 'bg-white border-green-100',
-    error: 'bg-white border-red-100',
-    warning: 'bg-white border-amber-100',
-    info: 'bg-white border-blue-100',
+    success: "bg-white border-green-100",
+    error: "bg-white border-red-100",
+    warning: "bg-white border-amber-100",
+    info: "bg-white border-blue-100",
   };
 
   return (
@@ -69,8 +78,13 @@ const ToastItem = ({ toast, onRemove }: { toast: Toast; onRemove: (id: string) =
       className={`pointer-events-auto min-w-[300px] p-4 rounded-xl shadow-lg border flex items-center gap-3 ${bgColors[toast.type]}`}
     >
       {icons[toast.type]}
-      <p className="text-sm font-medium text-gray-700 flex-1">{toast.message}</p>
-      <button onClick={() => onRemove(toast.id)} className="text-gray-400 hover:text-gray-600">
+      <p className="text-sm font-medium text-gray-700 flex-1">
+        {toast.message}
+      </p>
+      <button
+        onClick={() => onRemove(toast.id)}
+        className="text-gray-400 hover:text-gray-600"
+      >
         <X className="w-4 h-4" />
       </button>
     </motion.div>
@@ -79,6 +93,6 @@ const ToastItem = ({ toast, onRemove }: { toast: Toast; onRemove: (id: string) =
 
 export const useToast = () => {
   const context = useContext(ToastContext);
-  if (!context) throw new Error('useToast must be used within a ToastProvider');
+  if (!context) throw new Error("useToast must be used within a ToastProvider");
   return context;
 };

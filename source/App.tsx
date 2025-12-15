@@ -1,23 +1,23 @@
-import React, { useEffect, useState } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { ToastProvider } from './contexts/ToastContext';
-import { AppProvider, useApp } from './contexts/AppContext';
-import { NotificationProvider } from './contexts/NotificationContext';
-import { OrderProvider } from './contexts/OrderContext';
-import { PartnerProvider } from './contexts/PartnerContext';
-import { SecurityProvider } from './contexts/SecurityContext';
-import DashboardLayout from './layouts/DashboardLayout.tsx';
-import Dashboard from './pages/Dashboard';
-import Orders from './pages/Orders';
-import Menu from './pages/Menu';
-import Settings from './pages/Settings';
-import Login from './pages/Login';
-import Reports from './pages/Reports';
-import Customers from './pages/Customers';
-import CreativeStudio from './pages/CreativeStudio';
-import Chat from './pages/Chat';
-import POS from './pages/POS';
-import ProfileSelect from './pages/ProfileSelect';
+import React, { useEffect, useState } from "react";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { ToastProvider } from "./contexts/ToastContext";
+import { AppProvider, useApp } from "./contexts/AppContext";
+import { NotificationProvider } from "./contexts/NotificationContext";
+import { OrderProvider } from "./contexts/OrderContext";
+import { PartnerProvider } from "./contexts/PartnerContext";
+import { SecurityProvider } from "./contexts/SecurityContext";
+import DashboardLayout from "./layouts/DashboardLayout.tsx";
+import Dashboard from "./pages/Dashboard";
+import Orders from "./pages/Orders";
+import Menu from "./pages/Menu";
+import Settings from "./pages/Settings";
+import Login from "./pages/Login";
+import Reports from "./pages/Reports";
+import Customers from "./pages/Customers";
+import CreativeStudio from "./pages/CreativeStudio";
+import Chat from "./pages/Chat";
+import POS from "./pages/POS";
+import ProfileSelect from "./pages/ProfileSelect";
 
 // Componente para gerenciar o tema globalmente
 function ThemeController() {
@@ -25,8 +25,8 @@ function ThemeController() {
 
   useEffect(() => {
     const root = window.document.documentElement;
-    root.classList.remove('light');
-    root.classList.add('dark');
+    root.classList.remove("light");
+    root.classList.add("dark");
   }, []);
 
   return null;
@@ -54,7 +54,7 @@ function HomeRedirector() {
   }
 
   // Se está logado e é parceiro, vai para o dashboard
-  if (currentUser && currentUser.accountType === 'partner') {
+  if (currentUser && currentUser.accountType === "partner") {
     return <Navigate to="/dashboard" replace />;
   }
 
@@ -84,7 +84,7 @@ function ProtectedRoute({ element }: { element: React.ReactNode }) {
   }
 
   // Verificar se o usuário está logado e é um parceiro
-  if (!currentUser || currentUser.accountType !== 'partner') {
+  if (!currentUser || currentUser.accountType !== "partner") {
     return <Navigate to="/login" replace />;
   }
 
@@ -101,10 +101,16 @@ function AppContent() {
 
         {/* Rotas Públicas */}
         <Route path="/login" element={<Login />} />
-        <Route path="/select-profile" element={<ProtectedRoute element={<ProfileSelect />} />} />
+        <Route
+          path="/select-profile"
+          element={<ProtectedRoute element={<ProfileSelect />} />}
+        />
 
         {/* Rotas Protegidas (Dashboard) */}
-        <Route path="/dashboard" element={<ProtectedRoute element={<DashboardLayout />} />}>
+        <Route
+          path="/dashboard"
+          element={<ProtectedRoute element={<DashboardLayout />} />}
+        >
           <Route index element={<Dashboard />} />
           <Route path="orders" element={<Orders />} />
           <Route path="pos" element={<POS />} />

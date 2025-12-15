@@ -2,273 +2,273 @@
 
 ```yaml
 - generic [ref=e2]:
-  - generic [ref=e3]:
-    - complementary [ref=e4]:
-      - generic [ref=e5]:
-        - generic [ref=e6]:
-          - img [ref=e8]
-          - generic [ref=e13]:
-            - heading "Comércio" [level=1] [ref=e14]
-            - paragraph [ref=e15]: Gestor
-        - button [ref=e16] [cursor=pointer]:
-          - img [ref=e17]
-      - generic [ref=e20]:
-        - img [ref=e22]
-        - generic [ref=e24]:
-          - paragraph [ref=e25]: Administrador
-          - paragraph [ref=e26]: Administrador
-      - navigation [ref=e27]:
-        - generic [ref=e28]:
-          - heading "Operação" [level=3] [ref=e29]
-          - generic [ref=e30]:
-            - link "Dashboard" [ref=e31] [cursor=pointer]:
-              - /url: /dashboard
-              - img [ref=e32]
-              - generic [ref=e37]: Dashboard
-            - link "Pedidos 3" [ref=e38] [cursor=pointer]:
-              - /url: /dashboard/orders
-              - img [ref=e39]
-              - generic [ref=e43]: Pedidos
-              - generic [ref=e44]: "3"
-            - link "Frente de Caixa" [ref=e45] [cursor=pointer]:
-              - /url: /dashboard/pos
-              - img [ref=e46]
-              - generic [ref=e51]: Frente de Caixa
-            - link "Mensagens Pro" [ref=e52] [cursor=pointer]:
-              - /url: /dashboard/chat
-              - img [ref=e53]
-              - generic [ref=e55]: Mensagens
-              - generic [ref=e56]: Pro
-        - generic [ref=e57]:
-          - heading "Gestão" [level=3] [ref=e58]
-          - generic [ref=e59]:
-            - link "Catálogo de Itens" [ref=e60] [cursor=pointer]:
-              - /url: /dashboard/menu
-              - img [ref=e61]
-              - generic [ref=e62]: Catálogo de Itens
-            - link "Clientes" [ref=e63] [cursor=pointer]:
-              - /url: /dashboard/customers
-              - img [ref=e64]
-              - generic [ref=e69]: Clientes
-            - link "Relatórios" [ref=e70] [cursor=pointer]:
-              - /url: /dashboard/reports
-              - img [ref=e71]
-              - generic [ref=e73]: Relatórios
-            - link "Estúdio Criativo IA" [ref=e74] [cursor=pointer]:
-              - /url: /dashboard/creative-studio
-              - img [ref=e75]
-              - generic [ref=e78]: Estúdio Criativo
-              - generic [ref=e79]: IA
-        - generic [ref=e80]:
-          - heading "Sistema" [level=3] [ref=e81]
-          - link "Configurações" [ref=e83] [cursor=pointer]:
-            - /url: /dashboard/settings
-            - img [ref=e84]
-            - generic [ref=e87]: Configurações
-      - generic [ref=e88]:
-        - button "Caixa Fechado" [ref=e89] [cursor=pointer]:
-          - img [ref=e91]
-          - generic [ref=e94]: Caixa Fechado
-        - generic [ref=e95]:
-          - paragraph [ref=e96]: Plano
-          - generic [ref=e97]:
-            - paragraph [ref=e98]: Starter
-            - img [ref=e99]
-        - button "Sair" [ref=e101] [cursor=pointer]:
-          - img [ref=e102]
-          - generic [ref=e105]: Sair
-    - generic [ref=e106]:
-      - banner [ref=e107]:
-        - generic [ref=e109]:
-          - heading "Visão Geral" [level=2] [ref=e111]
-          - generic [ref=e112]:
-            - generic [ref=e113]:
-              - img [ref=e114]
-              - textbox "Buscar..." [ref=e117]
-            - button [ref=e119] [cursor=pointer]:
-              - img [ref=e120]
-            - generic [ref=e124]:
-              - generic [ref=e125]:
-                - paragraph [ref=e126]: Restaurante Alpha
-                - paragraph [ref=e127]: Loja Aberta
-              - img [ref=e129] [cursor=pointer]
-      - main [ref=e132]:
-        - generic [ref=e134]:
-          - generic [ref=e135]:
-            - generic [ref=e136]:
-              - heading "Visão Geral" [level=2] [ref=e137]
-              - paragraph [ref=e138]: Acompanhe o desempenho do seu comércio.
-            - generic [ref=e139]:
-              - button "Exportar CSV" [ref=e140] [cursor=pointer]:
-                - img [ref=e141]
-                - text: Exportar CSV
-              - button "PDF Detalhado" [ref=e144]:
-                - img [ref=e145]
-                - text: PDF Detalhado
-          - generic [ref=e148]:
-            - heading "IA Insights & Previsões" [level=2] [ref=e151]:
-              - img [ref=e152]
-              - text: IA Insights & Previsões
-            - generic [ref=e155]:
-              - img [ref=e157]
-              - generic [ref=e159]:
-                - heading "Desbloqueie a Inteligência Artificial" [level=3] [ref=e160]
-                - paragraph [ref=e161]: Receba previsões de vendas e dicas de otimização exclusivas no plano Enterprise.
-          - generic [ref=e162]:
-            - generic [ref=e163]:
-              - img [ref=e165]
-              - heading "Delivery" [level=2] [ref=e170]:
-                - img [ref=e172]
-                - text: Delivery
-              - generic [ref=e176]:
-                - generic [ref=e177]:
-                  - paragraph [ref=e178]: Total
-                  - paragraph [ref=e179]: "0"
-                - generic [ref=e180]:
-                  - paragraph [ref=e181]: Pendentes
-                  - paragraph [ref=e182]: "0"
-                - generic [ref=e183]:
-                  - paragraph [ref=e184]: Aceitos
-                  - paragraph [ref=e185]: "0"
-                - generic [ref=e186]:
-                  - paragraph [ref=e187]: Receita
-                  - paragraph [ref=e188]: R$ 0,00
-            - generic [ref=e189]:
-              - img [ref=e191]
-              - heading "Retirada" [level=2] [ref=e197]:
-                - img [ref=e199]
-                - text: Retirada
-              - generic [ref=e204]:
-                - generic [ref=e205]:
-                  - paragraph [ref=e206]: Total
-                  - paragraph [ref=e207]: "0"
-                - generic [ref=e208]:
-                  - paragraph [ref=e209]: Pendentes
-                  - paragraph [ref=e210]: "0"
-                - generic [ref=e211]:
-                  - paragraph [ref=e212]: Aceitos
-                  - paragraph [ref=e213]: "0"
-                - generic [ref=e214]:
-                  - paragraph [ref=e215]: Receita
-                  - paragraph [ref=e216]: R$ 0,00
-          - generic [ref=e217]:
-            - generic [ref=e218]:
-              - generic [ref=e219]:
-                - img [ref=e221]
-                - generic [ref=e223]: +12.5%
-              - heading "Receita Total" [level=3] [ref=e224]
-              - paragraph [ref=e225]: R$ 5.304,57
-              - paragraph [ref=e226]: Acumulado
-            - generic [ref=e227]:
-              - generic [ref=e228]:
-                - img [ref=e230]
-                - generic [ref=e235]: +8.2%
-              - heading "Vendas" [level=3] [ref=e236]
-              - paragraph [ref=e237]: "12"
-              - paragraph [ref=e238]: Total acumulado
-            - generic [ref=e239]:
-              - img [ref=e242]
-              - heading "Em Andamento" [level=3] [ref=e244]
-              - paragraph [ref=e245]: "8"
-              - paragraph [ref=e246]: Necessitam atenção
-            - generic [ref=e247]:
-              - generic [ref=e248]:
-                - img [ref=e250]
-                - generic [ref=e253]: +5.1%
-              - heading "Concluídos" [level=3] [ref=e254]
-              - paragraph [ref=e255]: "2"
-              - paragraph [ref=e256]: Finalizados com sucesso
-          - generic [ref=e257]:
-            - generic [ref=e260]:
-              - generic [ref=e261]:
-                - heading "Análise de Desempenho" [level=3] [ref=e262]
-                - paragraph [ref=e263]: Receita x Período
-              - generic [ref=e264]:
-                - button "Dia" [ref=e265] [cursor=pointer]
-                - button "Semana" [ref=e266] [cursor=pointer]
-                - button "Mês" [ref=e267] [cursor=pointer]
-            - generic [ref=e270]:
-              - generic [ref=e271]:
-                - heading "Atividade Recente" [level=3] [ref=e272]
-                - paragraph [ref=e273]: Últimas interações
-              - generic [ref=e274]:
-                - generic [ref=e275] [cursor=pointer]:
-                  - img "Roy Jerde" [ref=e277]
-                  - generic [ref=e279]:
-                    - generic [ref=e280]:
-                      - paragraph [ref=e281]: Roy Jerde
-                      - generic [ref=e282]: 20:50
-                    - paragraph [ref=e283]: "Status: pending"
-                - generic [ref=e284] [cursor=pointer]:
-                  - img "Joan Harber" [ref=e286]
-                  - generic [ref=e288]:
-                    - generic [ref=e289]:
-                      - paragraph [ref=e290]: Joan Harber
-                      - generic [ref=e291]: 00:58
-                    - paragraph [ref=e292]: "Status: ready"
-                - generic [ref=e293] [cursor=pointer]:
-                  - img "Dr. Marcella Haley" [ref=e295]
-                  - generic [ref=e297]:
-                    - generic [ref=e298]:
-                      - paragraph [ref=e299]: Dr. Marcella Haley
-                      - generic [ref=e300]: 03:09
-                    - paragraph [ref=e301]: "Status: completed"
-                - generic [ref=e302] [cursor=pointer]:
-                  - img "Terrell Hansen" [ref=e304]
-                  - generic [ref=e306]:
-                    - generic [ref=e307]:
-                      - paragraph [ref=e308]: Terrell Hansen
-                      - generic [ref=e309]: 14:07
-                    - paragraph [ref=e310]: "Status: pending"
-                - generic [ref=e311] [cursor=pointer]:
-                  - img "Abraham Smitham" [ref=e313]
-                  - generic [ref=e315]:
-                    - generic [ref=e316]:
-                      - paragraph [ref=e317]: Abraham Smitham
-                      - generic [ref=e318]: 08:39
-                    - paragraph [ref=e319]: "Status: accepted"
-                - generic [ref=e320] [cursor=pointer]:
-                  - img "Roland Ernser" [ref=e322]
-                  - generic [ref=e324]:
-                    - generic [ref=e325]:
-                      - paragraph [ref=e326]: Roland Ernser
-                      - generic [ref=e327]: 09:22
-                    - paragraph [ref=e328]: "Status: preparing"
-                - generic [ref=e329] [cursor=pointer]:
-                  - img "Brent Abshire" [ref=e331]
-                  - generic [ref=e333]:
-                    - generic [ref=e334]:
-                      - paragraph [ref=e335]: Brent Abshire
-                      - generic [ref=e336]: 13:48
-                    - paragraph [ref=e337]: "Status: preparing"
-                - generic [ref=e338] [cursor=pointer]:
-                  - img "Dave Kunze" [ref=e340]
-                  - generic [ref=e342]:
-                    - generic [ref=e343]:
-                      - paragraph [ref=e344]: Dave Kunze
-                      - generic [ref=e345]: 20:31
-                    - paragraph [ref=e346]: "Status: completed"
-                - generic [ref=e347] [cursor=pointer]:
-                  - img "Pearl Lowe" [ref=e349]
-                  - generic [ref=e351]:
-                    - generic [ref=e352]:
-                      - paragraph [ref=e353]: Pearl Lowe
-                      - generic [ref=e354]: 02:54
-                    - paragraph [ref=e355]: "Status: preparing"
-                - generic [ref=e356] [cursor=pointer]:
-                  - img "Jeanette O'Kon" [ref=e358]
-                  - generic [ref=e360]:
-                    - generic [ref=e361]:
-                      - paragraph [ref=e362]: Jeanette O'Kon
-                      - generic [ref=e363]: 06:38
-                    - paragraph [ref=e364]: "Status: pending"
-              - link "Ver Central de Pedidos" [ref=e366] [cursor=pointer]:
-                - /url: /dashboard/orders
-                - text: Ver Central de Pedidos
-                - img [ref=e367]
-  - generic [ref=e369]:
-    - img [ref=e370]
-    - paragraph [ref=e373]: Bem-vindo, Administrador! Você entrou como Administrador.
-    - button [ref=e374] [cursor=pointer]:
-      - img [ref=e375]
+    - generic [ref=e3]:
+        - complementary [ref=e4]:
+            - generic [ref=e5]:
+                - generic [ref=e6]:
+                    - img [ref=e8]
+                    - generic [ref=e13]:
+                        - heading "Comércio" [level=1] [ref=e14]
+                        - paragraph [ref=e15]: Gestor
+                - button [ref=e16] [cursor=pointer]:
+                    - img [ref=e17]
+            - generic [ref=e20]:
+                - img [ref=e22]
+                - generic [ref=e24]:
+                    - paragraph [ref=e25]: Administrador
+                    - paragraph [ref=e26]: Administrador
+            - navigation [ref=e27]:
+                - generic [ref=e28]:
+                    - heading "Operação" [level=3] [ref=e29]
+                    - generic [ref=e30]:
+                        - link "Dashboard" [ref=e31] [cursor=pointer]:
+                            - /url: /dashboard
+                            - img [ref=e32]
+                            - generic [ref=e37]: Dashboard
+                        - link "Pedidos 3" [ref=e38] [cursor=pointer]:
+                            - /url: /dashboard/orders
+                            - img [ref=e39]
+                            - generic [ref=e43]: Pedidos
+                            - generic [ref=e44]: "3"
+                        - link "Frente de Caixa" [ref=e45] [cursor=pointer]:
+                            - /url: /dashboard/pos
+                            - img [ref=e46]
+                            - generic [ref=e51]: Frente de Caixa
+                        - link "Mensagens Pro" [ref=e52] [cursor=pointer]:
+                            - /url: /dashboard/chat
+                            - img [ref=e53]
+                            - generic [ref=e55]: Mensagens
+                            - generic [ref=e56]: Pro
+                - generic [ref=e57]:
+                    - heading "Gestão" [level=3] [ref=e58]
+                    - generic [ref=e59]:
+                        - link "Catálogo de Itens" [ref=e60] [cursor=pointer]:
+                            - /url: /dashboard/menu
+                            - img [ref=e61]
+                            - generic [ref=e62]: Catálogo de Itens
+                        - link "Clientes" [ref=e63] [cursor=pointer]:
+                            - /url: /dashboard/customers
+                            - img [ref=e64]
+                            - generic [ref=e69]: Clientes
+                        - link "Relatórios" [ref=e70] [cursor=pointer]:
+                            - /url: /dashboard/reports
+                            - img [ref=e71]
+                            - generic [ref=e73]: Relatórios
+                        - link "Estúdio Criativo IA" [ref=e74] [cursor=pointer]:
+                            - /url: /dashboard/creative-studio
+                            - img [ref=e75]
+                            - generic [ref=e78]: Estúdio Criativo
+                            - generic [ref=e79]: IA
+                - generic [ref=e80]:
+                    - heading "Sistema" [level=3] [ref=e81]
+                    - link "Configurações" [ref=e83] [cursor=pointer]:
+                        - /url: /dashboard/settings
+                        - img [ref=e84]
+                        - generic [ref=e87]: Configurações
+            - generic [ref=e88]:
+                - button "Caixa Fechado" [ref=e89] [cursor=pointer]:
+                    - img [ref=e91]
+                    - generic [ref=e94]: Caixa Fechado
+                - generic [ref=e95]:
+                    - paragraph [ref=e96]: Plano
+                    - generic [ref=e97]:
+                        - paragraph [ref=e98]: Starter
+                        - img [ref=e99]
+                - button "Sair" [ref=e101] [cursor=pointer]:
+                    - img [ref=e102]
+                    - generic [ref=e105]: Sair
+        - generic [ref=e106]:
+            - banner [ref=e107]:
+                - generic [ref=e109]:
+                    - heading "Visão Geral" [level=2] [ref=e111]
+                    - generic [ref=e112]:
+                        - generic [ref=e113]:
+                            - img [ref=e114]
+                            - textbox "Buscar..." [ref=e117]
+                        - button [ref=e119] [cursor=pointer]:
+                            - img [ref=e120]
+                        - generic [ref=e124]:
+                            - generic [ref=e125]:
+                                - paragraph [ref=e126]: Restaurante Alpha
+                                - paragraph [ref=e127]: Loja Aberta
+                            - img [ref=e129] [cursor=pointer]
+            - main [ref=e132]:
+                - generic [ref=e134]:
+                    - generic [ref=e135]:
+                        - generic [ref=e136]:
+                            - heading "Visão Geral" [level=2] [ref=e137]
+                            - paragraph [ref=e138]: Acompanhe o desempenho do seu comércio.
+                        - generic [ref=e139]:
+                            - button "Exportar CSV" [ref=e140] [cursor=pointer]:
+                                - img [ref=e141]
+                                - text: Exportar CSV
+                            - button "PDF Detalhado" [ref=e144]:
+                                - img [ref=e145]
+                                - text: PDF Detalhado
+                    - generic [ref=e148]:
+                        - heading "IA Insights & Previsões" [level=2] [ref=e151]:
+                            - img [ref=e152]
+                            - text: IA Insights & Previsões
+                        - generic [ref=e155]:
+                            - img [ref=e157]
+                            - generic [ref=e159]:
+                                - heading "Desbloqueie a Inteligência Artificial" [level=3] [ref=e160]
+                                - paragraph [ref=e161]: Receba previsões de vendas e dicas de otimização exclusivas no plano Enterprise.
+                    - generic [ref=e162]:
+                        - generic [ref=e163]:
+                            - img [ref=e165]
+                            - heading "Delivery" [level=2] [ref=e170]:
+                                - img [ref=e172]
+                                - text: Delivery
+                            - generic [ref=e176]:
+                                - generic [ref=e177]:
+                                    - paragraph [ref=e178]: Total
+                                    - paragraph [ref=e179]: "0"
+                                - generic [ref=e180]:
+                                    - paragraph [ref=e181]: Pendentes
+                                    - paragraph [ref=e182]: "0"
+                                - generic [ref=e183]:
+                                    - paragraph [ref=e184]: Aceitos
+                                    - paragraph [ref=e185]: "0"
+                                - generic [ref=e186]:
+                                    - paragraph [ref=e187]: Receita
+                                    - paragraph [ref=e188]: R$ 0,00
+                        - generic [ref=e189]:
+                            - img [ref=e191]
+                            - heading "Retirada" [level=2] [ref=e197]:
+                                - img [ref=e199]
+                                - text: Retirada
+                            - generic [ref=e204]:
+                                - generic [ref=e205]:
+                                    - paragraph [ref=e206]: Total
+                                    - paragraph [ref=e207]: "0"
+                                - generic [ref=e208]:
+                                    - paragraph [ref=e209]: Pendentes
+                                    - paragraph [ref=e210]: "0"
+                                - generic [ref=e211]:
+                                    - paragraph [ref=e212]: Aceitos
+                                    - paragraph [ref=e213]: "0"
+                                - generic [ref=e214]:
+                                    - paragraph [ref=e215]: Receita
+                                    - paragraph [ref=e216]: R$ 0,00
+                    - generic [ref=e217]:
+                        - generic [ref=e218]:
+                            - generic [ref=e219]:
+                                - img [ref=e221]
+                                - generic [ref=e223]: +12.5%
+                            - heading "Receita Total" [level=3] [ref=e224]
+                            - paragraph [ref=e225]: R$ 5.304,57
+                            - paragraph [ref=e226]: Acumulado
+                        - generic [ref=e227]:
+                            - generic [ref=e228]:
+                                - img [ref=e230]
+                                - generic [ref=e235]: +8.2%
+                            - heading "Vendas" [level=3] [ref=e236]
+                            - paragraph [ref=e237]: "12"
+                            - paragraph [ref=e238]: Total acumulado
+                        - generic [ref=e239]:
+                            - img [ref=e242]
+                            - heading "Em Andamento" [level=3] [ref=e244]
+                            - paragraph [ref=e245]: "8"
+                            - paragraph [ref=e246]: Necessitam atenção
+                        - generic [ref=e247]:
+                            - generic [ref=e248]:
+                                - img [ref=e250]
+                                - generic [ref=e253]: +5.1%
+                            - heading "Concluídos" [level=3] [ref=e254]
+                            - paragraph [ref=e255]: "2"
+                            - paragraph [ref=e256]: Finalizados com sucesso
+                    - generic [ref=e257]:
+                        - generic [ref=e260]:
+                            - generic [ref=e261]:
+                                - heading "Análise de Desempenho" [level=3] [ref=e262]
+                                - paragraph [ref=e263]: Receita x Período
+                            - generic [ref=e264]:
+                                - button "Dia" [ref=e265] [cursor=pointer]
+                                - button "Semana" [ref=e266] [cursor=pointer]
+                                - button "Mês" [ref=e267] [cursor=pointer]
+                        - generic [ref=e270]:
+                            - generic [ref=e271]:
+                                - heading "Atividade Recente" [level=3] [ref=e272]
+                                - paragraph [ref=e273]: Últimas interações
+                            - generic [ref=e274]:
+                                - generic [ref=e275] [cursor=pointer]:
+                                    - img "Roy Jerde" [ref=e277]
+                                    - generic [ref=e279]:
+                                        - generic [ref=e280]:
+                                            - paragraph [ref=e281]: Roy Jerde
+                                            - generic [ref=e282]: 20:50
+                                        - paragraph [ref=e283]: "Status: pending"
+                                - generic [ref=e284] [cursor=pointer]:
+                                    - img "Joan Harber" [ref=e286]
+                                    - generic [ref=e288]:
+                                        - generic [ref=e289]:
+                                            - paragraph [ref=e290]: Joan Harber
+                                            - generic [ref=e291]: 00:58
+                                        - paragraph [ref=e292]: "Status: ready"
+                                - generic [ref=e293] [cursor=pointer]:
+                                    - img "Dr. Marcella Haley" [ref=e295]
+                                    - generic [ref=e297]:
+                                        - generic [ref=e298]:
+                                            - paragraph [ref=e299]: Dr. Marcella Haley
+                                            - generic [ref=e300]: 03:09
+                                        - paragraph [ref=e301]: "Status: completed"
+                                - generic [ref=e302] [cursor=pointer]:
+                                    - img "Terrell Hansen" [ref=e304]
+                                    - generic [ref=e306]:
+                                        - generic [ref=e307]:
+                                            - paragraph [ref=e308]: Terrell Hansen
+                                            - generic [ref=e309]: 14:07
+                                        - paragraph [ref=e310]: "Status: pending"
+                                - generic [ref=e311] [cursor=pointer]:
+                                    - img "Abraham Smitham" [ref=e313]
+                                    - generic [ref=e315]:
+                                        - generic [ref=e316]:
+                                            - paragraph [ref=e317]: Abraham Smitham
+                                            - generic [ref=e318]: 08:39
+                                        - paragraph [ref=e319]: "Status: accepted"
+                                - generic [ref=e320] [cursor=pointer]:
+                                    - img "Roland Ernser" [ref=e322]
+                                    - generic [ref=e324]:
+                                        - generic [ref=e325]:
+                                            - paragraph [ref=e326]: Roland Ernser
+                                            - generic [ref=e327]: 09:22
+                                        - paragraph [ref=e328]: "Status: preparing"
+                                - generic [ref=e329] [cursor=pointer]:
+                                    - img "Brent Abshire" [ref=e331]
+                                    - generic [ref=e333]:
+                                        - generic [ref=e334]:
+                                            - paragraph [ref=e335]: Brent Abshire
+                                            - generic [ref=e336]: 13:48
+                                        - paragraph [ref=e337]: "Status: preparing"
+                                - generic [ref=e338] [cursor=pointer]:
+                                    - img "Dave Kunze" [ref=e340]
+                                    - generic [ref=e342]:
+                                        - generic [ref=e343]:
+                                            - paragraph [ref=e344]: Dave Kunze
+                                            - generic [ref=e345]: 20:31
+                                        - paragraph [ref=e346]: "Status: completed"
+                                - generic [ref=e347] [cursor=pointer]:
+                                    - img "Pearl Lowe" [ref=e349]
+                                    - generic [ref=e351]:
+                                        - generic [ref=e352]:
+                                            - paragraph [ref=e353]: Pearl Lowe
+                                            - generic [ref=e354]: 02:54
+                                        - paragraph [ref=e355]: "Status: preparing"
+                                - generic [ref=e356] [cursor=pointer]:
+                                    - img "Jeanette O'Kon" [ref=e358]
+                                    - generic [ref=e360]:
+                                        - generic [ref=e361]:
+                                            - paragraph [ref=e362]: Jeanette O'Kon
+                                            - generic [ref=e363]: 06:38
+                                        - paragraph [ref=e364]: "Status: pending"
+                            - link "Ver Central de Pedidos" [ref=e366] [cursor=pointer]:
+                                - /url: /dashboard/orders
+                                - text: Ver Central de Pedidos
+                                - img [ref=e367]
+    - generic [ref=e369]:
+        - img [ref=e370]
+        - paragraph [ref=e373]: Bem-vindo, Administrador! Você entrou como Administrador.
+        - button [ref=e374] [cursor=pointer]:
+            - img [ref=e375]
 ```
