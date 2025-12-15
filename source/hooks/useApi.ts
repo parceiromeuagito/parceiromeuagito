@@ -1,23 +1,23 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 // ============= MOCK API FUNCTIONS =============
 // Em produção, estas funções chamariam um backend real
 
 const mockOrders = [
   {
-    id: '1',
-    customerName: 'João Silva',
-    total: 150.50,
-    status: 'pending',
-    items: ['Pizza Margherita', 'Refrigerante'],
+    id: "1",
+    customerName: "João Silva",
+    total: 150.5,
+    status: "pending",
+    items: ["Pizza Margherita", "Refrigerante"],
     createdAt: new Date().toISOString(),
   },
   {
-    id: '2',
-    customerName: 'Maria Santos',
-    total: 89.90,
-    status: 'preparing',
-    items: ['Burger Deluxe'],
+    id: "2",
+    customerName: "Maria Santos",
+    total: 89.9,
+    status: "preparing",
+    items: ["Burger Deluxe"],
     createdAt: new Date().toISOString(),
   },
 ];
@@ -26,10 +26,10 @@ const mockOrders = [
 
 export function useOrders() {
   return useQuery({
-    queryKey: ['orders'],
+    queryKey: ["orders"],
     queryFn: async () => {
       // Simular latência de rede
-      await new Promise(resolve => setTimeout(resolve, 500));
+      await new Promise((resolve) => setTimeout(resolve, 500));
       return mockOrders;
     },
     staleTime: 1000 * 60 * 5, // 5 minutos
@@ -38,10 +38,10 @@ export function useOrders() {
 
 export function useOrder(orderId: string) {
   return useQuery({
-    queryKey: ['orders', orderId],
+    queryKey: ["orders", orderId],
     queryFn: async () => {
-      await new Promise(resolve => setTimeout(resolve, 300));
-      return mockOrders.find(o => o.id === orderId) || null;
+      await new Promise((resolve) => setTimeout(resolve, 300));
+      return mockOrders.find((o) => o.id === orderId) || null;
     },
   });
 }
@@ -52,12 +52,12 @@ export function useUpdateOrder() {
   return useMutation({
     mutationFn: async (data: { orderId: string; status: string }) => {
       // Simular chamada de API
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 1000));
       return { success: true, ...data };
     },
     onSuccess: () => {
       // Invalidar cache de pedidos para refetch automático
-      queryClient.invalidateQueries({ queryKey: ['orders'] });
+      queryClient.invalidateQueries({ queryKey: ["orders"] });
     },
   });
 }
@@ -74,11 +74,15 @@ export function useCreateOrder() {
 
   return useMutation({
     mutationFn: async (orderData: OrderInput) => {
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      return { id: Math.random().toString(), createdAt: new Date().toISOString(), ...orderData };
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      return {
+        id: Math.random().toString(),
+        createdAt: new Date().toISOString(),
+        ...orderData,
+      };
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['orders'] });
+      queryClient.invalidateQueries({ queryKey: ["orders"] });
     },
   });
 }
@@ -87,11 +91,11 @@ export function useCreateOrder() {
 
 export function useDashboardStats() {
   return useQuery({
-    queryKey: ['dashboard', 'stats'],
+    queryKey: ["dashboard", "stats"],
     queryFn: async () => {
-      await new Promise(resolve => setTimeout(resolve, 500));
+      await new Promise((resolve) => setTimeout(resolve, 500));
       return {
-        totalRevenue: 12500.50,
+        totalRevenue: 12500.5,
         totalOrders: 156,
         activeOrders: 8,
         completedOrders: 148,
@@ -105,13 +109,13 @@ export function useDashboardStats() {
 
 export function useMenuItems() {
   return useQuery({
-    queryKey: ['menu', 'items'],
+    queryKey: ["menu", "items"],
     queryFn: async () => {
-      await new Promise(resolve => setTimeout(resolve, 500));
+      await new Promise((resolve) => setTimeout(resolve, 500));
       return [
-        { id: '1', name: 'Pizza Margherita', category: 'pizzas', price: 45.90 },
-        { id: '2', name: 'Burger Deluxe', category: 'burgers', price: 35.90 },
-        { id: '3', name: 'Coca-Cola', category: 'drinks', price: 8.90 },
+        { id: "1", name: "Pizza Margherita", category: "pizzas", price: 45.9 },
+        { id: "2", name: "Burger Deluxe", category: "burgers", price: 35.9 },
+        { id: "3", name: "Coca-Cola", category: "drinks", price: 8.9 },
       ];
     },
   });
@@ -119,16 +123,16 @@ export function useMenuItems() {
 
 // ============= HOOKS PARA FINANCEIRO =============
 
-export function useFinancialReport(period: 'daily' | 'weekly' | 'monthly') {
+export function useFinancialReport(period: "daily" | "weekly" | "monthly") {
   return useQuery({
-    queryKey: ['financial', 'report', period],
+    queryKey: ["financial", "report", period],
     queryFn: async () => {
-      await new Promise(resolve => setTimeout(resolve, 800));
+      await new Promise((resolve) => setTimeout(resolve, 800));
       return {
         period,
-        revenue: 12500.50,
-        expenses: 3200.00,
-        profit: 9300.50,
+        revenue: 12500.5,
+        expenses: 3200.0,
+        profit: 9300.5,
         transactions: [],
       };
     },
