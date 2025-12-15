@@ -1,17 +1,17 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { ArrowRight, Lock, Mail, Loader2 } from 'lucide-react';
-import { motion } from 'framer-motion';
-import { useApp } from '../contexts/AppContext';
-import { useToast } from '../contexts/ToastContext';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { ArrowRight, Lock, Mail, Loader2 } from "lucide-react";
+import { motion } from "framer-motion";
+import { useApp } from "../contexts/AppContext";
+import { useToast } from "../contexts/ToastContext";
 
 const Login = () => {
   const navigate = useNavigate();
   const { login } = useApp();
   const { addToast: _addToast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
-  const [email, setEmail] = useState('parceiro@meuagito.com');
-  const [password, setPassword] = useState('123456');
+  const [email, setEmail] = useState("parceiro@meuagito.com");
+  const [password, setPassword] = useState("123456");
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,7 +21,7 @@ const Login = () => {
     const success = await login(email, password);
 
     if (success) {
-      navigate('/select-profile');
+      navigate("/select-profile");
     }
     setIsLoading(false);
   };
@@ -42,9 +42,15 @@ const Login = () => {
 
         <div className="relative z-10 text-center px-12">
           <div className="bg-white/10 backdrop-blur-lg p-4 rounded-2xl inline-block mb-6 shadow-2xl border border-white/10">
-            <img src="/assets/logo.png" alt="Meu Agito Logo" className="w-16 h-16 object-contain" />
+            <img
+              src="/assets/logo.png"
+              alt="Meu Agito Logo"
+              className="w-16 h-16 object-contain"
+            />
           </div>
-          <h1 className="text-5xl font-bold text-white mb-4">Meu Agito <span className="text-orange-500">Parceiros</span></h1>
+          <h1 className="text-5xl font-bold text-white mb-4">
+            Meu Agito <span className="text-orange-500">Parceiros</span>
+          </h1>
           <p className="text-gray-300 text-xl max-w-md mx-auto leading-relaxed font-light">
             Seu negócio, no centro do agito.
           </p>
@@ -64,13 +70,19 @@ const Login = () => {
           className="max-w-md w-full bg-gray-900 p-10 rounded-3xl shadow-2xl border border-gray-800"
         >
           <div className="text-center mb-10">
-            <h2 className="text-3xl font-bold text-white">Bem-vindo de volta</h2>
-            <p className="text-gray-400 mt-2">Acesse seu painel administrativo</p>
+            <h2 className="text-3xl font-bold text-white">
+              Bem-vindo de volta
+            </h2>
+            <p className="text-gray-400 mt-2">
+              Acesse seu painel administrativo
+            </p>
           </div>
 
           <form onSubmit={handleLogin} className="space-y-6">
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Email Corporativo</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">
+                Email Corporativo
+              </label>
               <div className="relative">
                 <Mail className="w-5 h-5 text-gray-500 absolute left-3 top-1/2 -translate-y-1/2" />
                 <input
@@ -85,7 +97,9 @@ const Login = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Senha</label>
+              <label className="block text-sm font-medium text-gray-300 mb-2">
+                Senha
+              </label>
               <div className="relative">
                 <Lock className="w-5 h-5 text-gray-500 absolute left-3 top-1/2 -translate-y-1/2" />
                 <input
@@ -100,10 +114,20 @@ const Login = () => {
 
             <div className="flex items-center justify-between text-sm">
               <label className="flex items-center cursor-pointer">
-                <input type="checkbox" className="rounded border-gray-600 bg-gray-800 text-orange-600 focus:ring-orange-500 h-4 w-4" />
+                <input
+                  type="checkbox"
+                  className="rounded border-gray-600 bg-gray-800 text-orange-600 focus:ring-orange-500 h-4 w-4"
+                />
                 <span className="text-gray-400 ml-2">Lembrar-me</span>
               </label>
-              <a href="https://meuagito.com/recuperar-senha" target="_blank" rel="noopener noreferrer" className="text-orange-500 font-medium hover:underline hover:text-orange-400">Esqueceu a senha?</a>
+              <a
+                href="https://meuagito.com/recuperar-senha"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-orange-500 font-medium hover:underline hover:text-orange-400"
+              >
+                Esqueceu a senha?
+              </a>
             </div>
 
             <button
@@ -123,7 +147,15 @@ const Login = () => {
           </form>
 
           <div className="mt-8 text-center text-sm text-gray-400">
-            Não tem uma conta? <a href="https://meuagito.com" target="_blank" rel="noopener noreferrer" className="text-orange-500 font-bold hover:underline hover:text-orange-400">Inscreva-se em meuagito.com</a>
+            Não tem uma conta?{" "}
+            <a
+              href="https://meuagito.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-orange-500 font-bold hover:underline hover:text-orange-400"
+            >
+              Inscreva-se em meuagito.com
+            </a>
           </div>
         </motion.div>
       </div>
