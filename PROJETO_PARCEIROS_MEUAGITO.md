@@ -9,6 +9,7 @@ O **parceirosmeuagito.com** é um **Portal de Gestão Completo** desenvolvido pa
 ## 🎯 Propósito da Aplicação
 
 ### Objetivo Principal
+
 Fornecer uma **plataforma unificada** para que parceiros (restaurantes, lojas, hotéis, prestadores de serviço, organizadores de eventos) possam:
 
 1. **Receber e gerenciar pedidos** vindos da plataforma Meu Agito
@@ -24,18 +25,18 @@ Fornecer uma **plataforma unificada** para que parceiros (restaurantes, lojas, h
 
 ### Stack Tecnológico
 
-| Tecnologia | Versão | Função |
-|------------|--------|--------|
-| **React** | 19.1.0 | Framework UI |
-| **TypeScript** | 5.8.3 | Tipagem estática |
-| **Vite** | 6.3.5 | Build tool |
-| **Zustand** | 5.0.9 | Gerenciamento de estado |
-| **TailwindCSS** | 3.4.1 | Estilização |
-| **React Router** | 7.10.0 | Roteamento SPA |
-| **ECharts** | 6.0.0 | Gráficos e visualizações |
-| **Framer Motion** | 12.23.25 | Animações |
-| **Radix UI** | Vários | Componentes acessíveis |
-| **Playwright** | 1.57.0 | Testes E2E |
+| Tecnologia        | Versão   | Função                   |
+| ----------------- | -------- | ------------------------ |
+| **React**         | 19.1.0   | Framework UI             |
+| **TypeScript**    | 5.8.3    | Tipagem estática         |
+| **Vite**          | 6.3.5    | Build tool               |
+| **Zustand**       | 5.0.9    | Gerenciamento de estado  |
+| **TailwindCSS**   | 3.4.1    | Estilização              |
+| **React Router**  | 7.10.0   | Roteamento SPA           |
+| **ECharts**       | 6.0.0    | Gráficos e visualizações |
+| **Framer Motion** | 12.23.25 | Animações                |
+| **Radix UI**      | Vários   | Componentes acessíveis   |
+| **Playwright**    | 1.57.0   | Testes E2E               |
 
 ### Estrutura de Diretórios
 
@@ -72,11 +73,13 @@ src/
 ## 📱 Páginas e Funcionalidades
 
 ### 1. 🔐 Login (`/login`)
+
 - Autenticação de parceiros
 - Verificação de tipo de conta (`partner`)
 - Redirecionamento automático
 
 ### 2. 📊 Dashboard (`/dashboard`)
+
 **Hub central de métricas e insights**
 
 - **Estatísticas em tempo real:**
@@ -84,13 +87,13 @@ src/
   - Pedidos Ativos
   - Pedidos Concluídos
   - Tendências (%)
-  
 - **AI Insights Card:** Sugestões inteligentes baseadas em IA
 - **Gráfico de Desempenho:** Receita por período (ECharts)
 - **Feed de Atividades:** Últimos eventos
 - **Dashboards por Serviço:** Métricas específicas por tipo
 
 ### 3. 📦 Pedidos (`/dashboard/orders`)
+
 **Central de gestão de pedidos**
 
 - **Tipos suportados:**
@@ -112,6 +115,7 @@ src/
   - Chat com cliente
 
 ### 4. 🛒 PDV / POS (`/dashboard/pos`)
+
 **Ponto de Venda para vendas presenciais**
 
 - Seleção de produtos do catálogo
@@ -125,6 +129,7 @@ src/
 - Impressão de cupom
 
 ### 5. 🍔 Menu / Catálogo (`/dashboard/menu`)
+
 **Gestão completa de produtos e serviços**
 
 - **Tipos de itens:**
@@ -147,6 +152,7 @@ src/
   - Capacidade, amenidades (hospedagem)
 
 ### 6. 👥 Clientes (`/dashboard/customers`)
+
 **CRM básico**
 
 - Lista de clientes
@@ -155,6 +161,7 @@ src/
 - Notas internas
 
 ### 7. 💬 Chat (`/dashboard/chat`)
+
 **Comunicação com clientes**
 
 - Conversas por pedido
@@ -162,6 +169,7 @@ src/
 - Histórico persistente
 
 ### 8. 📈 Relatórios (`/dashboard/reports`)
+
 **Análises e exportações**
 
 - Relatórios de vendas
@@ -169,6 +177,7 @@ src/
 - Exportação CSV/PDF
 
 ### 9. 🎨 Creative Studio (`/dashboard/creative-studio`)
+
 **Criação de campanhas com IA**
 
 - Geração de campanhas
@@ -176,6 +185,7 @@ src/
 - Previsão de demanda
 
 ### 10. ⚙️ Configurações (`/dashboard/settings`)
+
 **Personalização completa**
 
 - **Perfil do negócio**
@@ -192,6 +202,7 @@ src/
 ## 🔧 Sistemas Internos
 
 ### Gestão de Caixa
+
 ```typescript
 interface CashRegisterState {
   isOpen: boolean;
@@ -202,25 +213,30 @@ interface CashRegisterState {
   transactions: CashTransaction[];
 }
 ```
+
 - Abertura/Fechamento de caixa
 - Suprimentos e sangrias
 - Registro automático de vendas em dinheiro
 
 ### Controle de Estoque
+
 - Verificação de disponibilidade antes de aceitar pedido
 - Dedução automática ao processar
 - Alertas de estoque baixo
 - Desativação automática quando esgota
 
 ### Sistema de Planos
-| Plano | Recursos |
-|-------|----------|
-| **Starter** | Funcionalidades básicas |
-| **Pro** | Relatórios avançados, integrações |
-| **Enterprise** | IA, múltiplos estabelecimentos |
+
+| Plano          | Recursos                          |
+| -------------- | --------------------------------- |
+| **Starter**    | Funcionalidades básicas           |
+| **Pro**        | Relatórios avançados, integrações |
+| **Enterprise** | IA, múltiplos estabelecimentos    |
 
 ### Contexto de Negócio Adaptativo
+
 O sistema adapta a interface automaticamente baseado no tipo de negócio:
+
 - **Restaurant:** Foco em pedidos e cozinha
 - **Hotel:** Check-in/out, quartos
 - **Scheduling:** Agenda e horários
@@ -241,6 +257,7 @@ O sistema adapta a interface automaticamente baseado no tipo de negócio:
 ## 🌐 Integração com Ecossistema
 
 ### Marketplaces Suportados
+
 - iFood
 - Rappi
 - UberEats
@@ -249,6 +266,7 @@ O sistema adapta a interface automaticamente baseado no tipo de negócio:
 - Google Reserve
 
 ### Fontes de Pedidos (`OrderSource`)
+
 - `online` - App/Site Meu Agito
 - `counter` - Balcão/PDV
 - `marketplace_ifood`, `marketplace_rappi`, etc.
@@ -267,13 +285,13 @@ O sistema adapta a interface automaticamente baseado no tipo de negócio:
 
 ## 📂 Arquivos Principais
 
-| Arquivo | Função |
-|---------|--------|
-| `App.tsx` | Roteamento e providers |
-| `PartnerContext.tsx` | Estado principal (766 linhas) |
-| `OrderContext.tsx` | Gestão de pedidos |
-| `useBusinessStore.ts` | Configurações do negócio |
-| `usePOSStore.ts` | Estado do PDV |
+| Arquivo               | Função                        |
+| --------------------- | ----------------------------- |
+| `App.tsx`             | Roteamento e providers        |
+| `PartnerContext.tsx`  | Estado principal (766 linhas) |
+| `OrderContext.tsx`    | Gestão de pedidos             |
+| `useBusinessStore.ts` | Configurações do negócio      |
+| `usePOSStore.ts`      | Estado do PDV                 |
 
 ---
 
