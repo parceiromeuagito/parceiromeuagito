@@ -1,0 +1,175 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Glassmorphism Utilities */
+.glass {
+  background: rgba(24, 24, 27, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.glass-hover:hover {
+  background: rgba(39, 39, 42, 0.8);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #3f3f46;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #52525b;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Custom Scrollbar Class */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #3f3f46;
+  border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #52525b;
+}
+
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #3f3f46 transparent;
+}
+
+@layer base {
+  :root {
+    /* TEMA CLARO - Tons de branco/cinza claro */
+    --background: 0 0% 100%;
+    /* #ffffff - Branco puro */
+    --foreground: 240 10% 3.9%;
+    /* #09090b - Texto escuro */
+    --card: 0 0% 98%;
+    /* #fafafa - Cinza muito claro */
+    --card-foreground: 240 10% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+    --muted: 0 0% 96.1%;
+    /* #f5f5f5 - Cinza claro */
+    --muted-foreground: 240 3.8% 46.1%;
+
+    /* CORES PRINCIPAIS - IGUAL MEUAGITO.COM */
+    --primary: 25 95 53;
+    /* #f97316 - Orange 500 */
+    --primary-foreground: 0 0 100;
+    /* #ffffff */
+    --secondary: 0 84 60;
+    /* #ef4444 - Red 500 */
+    --secondary-foreground: 0 0 100;
+    --accent: 38 92 50;
+    /* #f59e0b - Amber 500 */
+    --accent-foreground: 0 0 100;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 89.8%;
+    /* #e5e5e5 - Border claro */
+    --input: 0 0% 89.8%;
+    --ring: 25 95 53;
+    /* Primary Orange */
+    --chart-1: 25 95 53;
+    /* Orange */
+    --chart-2: 0 84 60;
+    /* Red */
+    --chart-3: 38 92 50;
+    /* Amber */
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    /* TEMA ESCURO - EXATAMENTE COMO MEUAGITO.COM */
+    --background: 240 10% 3.9%;
+    /* #09090b - Zinc 950 */
+    --foreground: 0 0% 98%;
+    /* #fafafa - Texto claro */
+    --card: 240 5.9% 10%;
+    /* #18181b - Zinc 900 */
+    --card-foreground: 0 0% 98%;
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --muted: 240 3.7% 15.9%;
+    /* #27272a - Zinc 800 */
+    --muted-foreground: 240 5% 64.9%;
+
+    /* CORES PRINCIPAIS - IGUAL MEUAGITO.COM */
+    --primary: 25 95 53;
+    /* #f97316 - Orange 500 */
+    --primary-foreground: 0 0 100;
+    --secondary: 0 84 60;
+    /* #ef4444 - Red 500 */
+    --secondary-foreground: 0 0 100;
+    --accent: 38 92 50;
+    /* #f59e0b - Amber 500 */
+    --accent-foreground: 0 0 100;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 3.7% 15.9%;
+    /* #27272a - Zinc 800 */
+    --input: 240 3.7% 15.9%;
+    --ring: 25 95 53;
+    /* Primary Orange */
+    --chart-1: 25 95 53;
+    /* Orange */
+    --chart-2: 0 84 60;
+    /* Red */
+    --chart-3: 38 92 50;
+    /* Amber */
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
