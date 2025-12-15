@@ -5,54 +5,63 @@ import { formatCurrency, formatDate } from "./utils";
 export type { PrinterConfig };
 
 export const DEFAULT_PRINTER_CONFIG: PrinterConfig = {
-  printerName: 'default',
-  paperWidth: '80mm',
-  fontSize: 'medium',
+  printerName: "default",
+  paperWidth: "80mm",
+  fontSize: "medium",
   autoPrintOnAccept: false,
   copies: 1,
   showCustomerAddress: true,
-  customHeader: 'Meu Agito Parceiros',
-  customFooter: 'Obrigado pela preferência!'
+  customHeader: "Meu Agito Parceiros",
+  customFooter: "Obrigado pela preferência!",
 };
 
 // ... (manter printOrderReceipt existente) ...
 
 export const printOrderReceipt = (order: Order, config: PrinterConfig) => {
-  const printWindow = window.open('', '_blank');
+  const printWindow = window.open("", "_blank");
 
   if (!printWindow) {
     alert("Por favor, permita pop-ups para imprimir.");
     return;
   }
 
-  const itemsHtml = order.items.map(item => `
+  const itemsHtml = order.items
+    .map(
+      (item) => `
     <div class="item">
       <span class="qty">${item.quantity}x</span>
       <span class="name">${item.name}</span>
       <span class="price">${formatCurrency(item.price * item.quantity)}</span>
     </div>
-    ${item.details ? `<div class="details">Obs: ${item.details}</div>` : ''}
-  `).join('');
+    ${item.details ? `<div class="details">Obs: ${item.details}</div>` : ""}
+  `,
+    )
+    .join("");
 
-  const fontSize = config.fontSize === 'small' ? '10px' : config.fontSize === 'large' ? '14px' : '12px';
+  const fontSize =
+    config.fontSize === "small"
+      ? "10px"
+      : config.fontSize === "large"
+        ? "14px"
+        : "12px";
 
   const receiptContent = `
     <div class="receipt">
       <div class="header">
-        <h1>${config.customHeader || 'UniManager Store'}</h1>
+        <h1>${config.customHeader || "UniManager Store"}</h1>
         <p>CNPJ: 00.000.000/0000-00</p>
         <p>${formatDate(new Date())}</p>
         <div class="source-tag">
-          ORIGEM: ${order.source === 'counter' ? 'BALCÃO' : order.source.toUpperCase()}
+          ORIGEM: ${order.source === "counter" ? "BALCÃO" : order.source.toUpperCase()}
         </div>
       </div>
 
       <div class="info">
         <p><strong>Pedido: ${order.id}</strong></p>
         <p>Cliente: ${order.customerName}</p>
-        ${config.showCustomerAddress ? `<p>Tel: ${order.customerContact}</p>` : ''}
-        ${order.type === 'hotel' ? `<p>Check-in: ${formatDate(new Date(order.checkIn!))}</p>` : ''}
-        ${order.type === 'reservation' ? `<p>Mesa/Pessoas: ${order.guests}</p>` : ''}
+        ${config.showCustomerAddress ? `<p>Tel: ${order.customerContact}</p>` : ""}
+        ${order.type === "hotel" ? `<p>Check-in: ${formatDate(new Date(order.checkIn!))}</p>` : ""}
+        ${order.type === "reservation" ? `<p>Mesa/Pessoas: ${order.guests}</p>` : ""}
       </div>
 
       <div class="items">
@@ -61,54 +70,64 @@ export const printOrderReceipt = (order: Order, config: PrinterConfig) => {
 
       <div class="totals">
         <div class="total-row">TOTAL: ${formatCurrency(order.total)}</div>
-        <p>Pagamento: ${order.paymentMethod === 'credit_card' ? 'Cartão Crédito' : order.paymentMethod}</p>
+        <p>Pagamento: ${order.paymentMethod === "credit_card" ? "Cartão Crédito" : order.paymentMethod}</p>
       </div>
 
       <div class="footer">
-        <p>${config.customFooter || 'Obrigado pela preferência!'}</p>
+        <p>${config.customFooter || "Obrigado pela preferência!"}</p>
         <p>Sistema UniManager</p>
       </div>
     </div>
   `;
 
-  const fullContent = Array(config.copies).fill(receiptContent).join('<div class="page-break"></div>');
+  const fullContent = Array(config.copies)
+    .fill(receiptContent)
+    .join('<div class="page-break"></div>');
   writeAndPrint(printWindow, fullContent, config.paperWidth, fontSize);
 };
 
 // --- NOVA FUNÇÃO: IMPRESSÃO DE FECHAMENTO DE CAIXA ---
-export const printCashReport = (register: CashRegisterState, config: PrinterConfig) => {
-  const printWindow = window.open('', '_blank');
+export const printCashReport = (
+  register: CashRegisterState,
+  config: PrinterConfig,
+) => {
+  const printWindow = window.open("", "_blank");
   if (!printWindow) {
     alert("Por favor, permita pop-ups para imprimir.");
     return;
   }
 
   const salesTotal = register.transactions
-    .filter(t => t.type === 'sale')
+    .filter((t) => t.type === "sale")
     .reduce((acc, t) => acc + t.amount, 0);
 
   const supplyTotal = register.transactions
-    .filter(t => t.type === 'supply')
+    .filter((t) => t.type === "supply")
     .reduce((acc, t) => acc + t.amount, 0);
 
   const bleedTotal = register.transactions
-    .filter(t => t.type === 'bleed')
+    .filter((t) => t.type === "bleed")
     .reduce((acc, t) => acc + t.amount, 0);
 
-  const fontSize = config.fontSize === 'small' ? '10px' : config.fontSize === 'large' ? '14px' : '12px';
+  const fontSize =
+    config.fontSize === "small"
+      ? "10px"
+      : config.fontSize === "large"
+        ? "14px"
+        : "12px";
 
   const receiptContent = `
     <div class="receipt">
       <div class="header">
         <h1>FECHAMENTO DE CAIXA</h1>
-        <p>${config.customHeader || 'UniManager Store'}</p>
+        <p>${config.customHeader || "UniManager Store"}</p>
         <p>Data: ${formatDate(new Date())}</p>
       </div>
 
       <div class="info">
-        <p>Operador: ${register.transactions[0]?.user || 'Admin'}</p>
-        <p>Abertura: ${register.openedAt ? formatDate(new Date(register.openedAt)) : 'N/A'}</p>
-        <p>Fechamento: ${register.closedAt ? formatDate(new Date(register.closedAt)) : 'Em Aberto'}</p>
+        <p>Operador: ${register.transactions[0]?.user || "Admin"}</p>
+        <p>Abertura: ${register.openedAt ? formatDate(new Date(register.openedAt)) : "N/A"}</p>
+        <p>Fechamento: ${register.closedAt ? formatDate(new Date(register.closedAt)) : "Em Aberto"}</p>
       </div>
 
       <div class="items">
@@ -147,7 +166,12 @@ export const printCashReport = (register: CashRegisterState, config: PrinterConf
 };
 
 // Helper interno para evitar duplicação de código HTML
-const writeAndPrint = (win: Window, content: string, width: string, fontSize: string) => {
+const writeAndPrint = (
+  win: Window,
+  content: string,
+  width: string,
+  fontSize: string,
+) => {
   const htmlContent = `
     <!DOCTYPE html>
     <html>

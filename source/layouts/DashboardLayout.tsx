@@ -1,10 +1,13 @@
-import { useState } from 'react';
-import { Outlet, useLocation } from 'react-router-dom';
-import Sidebar from '../components/Sidebar';
-import ChatSidebar from '../components/ChatSidebar';
-import Header from '../components/Header';
-import { useBusinessStore, getBusinessContext } from '../store/useBusinessStore';
-import { Order } from '../types';
+import { useState } from "react";
+import { Outlet, useLocation } from "react-router-dom";
+import Sidebar from "../components/Sidebar";
+import ChatSidebar from "../components/ChatSidebar";
+import Header from "../components/Header";
+import {
+  useBusinessStore,
+  getBusinessContext,
+} from "../store/useBusinessStore";
+import { Order } from "../types";
 
 const DashboardLayout = () => {
   const location = useLocation();
@@ -15,23 +18,34 @@ const DashboardLayout = () => {
   const [isChatSidebarCollapsed, setIsChatSidebarCollapsed] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
 
-  const canUseChat = config.plan !== 'starter';
+  const canUseChat = config.plan !== "starter";
 
   // NOTA: A proteção de rota já é feita pelo ProtectedRoute no App.tsx usando AppContext
 
   const getPageTitle = () => {
     switch (location.pathname) {
-      case '/': return 'Visão Geral';
-      case '/dashboard': return 'Visão Geral';
-      case '/dashboard/orders': return `Gestão de ${context.actionLabel}s`;
-      case '/dashboard/menu': return 'Catálogo de Itens';
-      case '/dashboard/customers': return 'Clientes';
-      case '/dashboard/chat': return 'Mensagens';
-      case '/dashboard/reports': return 'Relatórios e Métricas';
-      case '/dashboard/creative-studio': return 'Estúdio Criativo';
-      case '/dashboard/settings': return 'Configurações';
-      case '/dashboard/pos': return 'Frente de Caixa';
-      default: return 'Dashboard';
+      case "/":
+        return "Visão Geral";
+      case "/dashboard":
+        return "Visão Geral";
+      case "/dashboard/orders":
+        return `Gestão de ${context.actionLabel}s`;
+      case "/dashboard/menu":
+        return "Catálogo de Itens";
+      case "/dashboard/customers":
+        return "Clientes";
+      case "/dashboard/chat":
+        return "Mensagens";
+      case "/dashboard/reports":
+        return "Relatórios e Métricas";
+      case "/dashboard/creative-studio":
+        return "Estúdio Criativo";
+      case "/dashboard/settings":
+        return "Configurações";
+      case "/dashboard/pos":
+        return "Frente de Caixa";
+      default:
+        return "Dashboard";
     }
   };
 
@@ -56,7 +70,9 @@ const DashboardLayout = () => {
       {canUseChat && (
         <ChatSidebar
           isCollapsed={isChatSidebarCollapsed}
-          onToggleCollapse={() => setIsChatSidebarCollapsed(!isChatSidebarCollapsed)}
+          onToggleCollapse={() =>
+            setIsChatSidebarCollapsed(!isChatSidebarCollapsed)
+          }
           externalSelectedOrder={selectedOrder}
         />
       )}
@@ -68,7 +84,13 @@ const DashboardLayout = () => {
         />
         <main className="flex-1 px-4 py-6 sm:px-6 lg:px-8 overflow-y-auto scroll-smooth">
           <div className="mx-auto w-full max-w-7xl">
-            <Outlet context={{ setSelectedChatOrder: setSelectedOrder, isChatSidebarCollapsed, setIsChatSidebarCollapsed }} />
+            <Outlet
+              context={{
+                setSelectedChatOrder: setSelectedOrder,
+                isChatSidebarCollapsed,
+                setIsChatSidebarCollapsed,
+              }}
+            />
           </div>
         </main>
       </div>

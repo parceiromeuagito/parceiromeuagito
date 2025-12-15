@@ -1,13 +1,62 @@
 // Re-export all UI components from a single place
-export { Button, buttonVariants, type ButtonProps } from './button'
-export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent } from './card'
-export { Input, type InputProps } from './input'
-export { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogFooter, DialogTitle, DialogDescription, DialogPortal, DialogOverlay, DialogClose } from './dialog'
-export { Badge, badgeVariants, type BadgeProps } from './badge'
-export { Tabs, TabsList, TabsTrigger, TabsContent } from './tabs'
-export { Select, SelectGroup, SelectValue, SelectTrigger, SelectContent, SelectItem, SelectSeparator, SelectScrollUpButton, SelectScrollDownButton } from './select'
-export { Textarea, type TextareaProps } from './textarea'
-export { Label } from './label'
-export { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuCheckboxItem, DropdownMenuRadioItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuShortcut, DropdownMenuGroup, DropdownMenuPortal, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuRadioGroup } from './dropdown-menu'
-export { Switch } from './switch'
-export { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from './tooltip'
+export { Button, buttonVariants, type ButtonProps } from "./button";
+export {
+  Card,
+  CardHeader,
+  CardFooter,
+  CardTitle,
+  CardDescription,
+  CardContent,
+} from "./card";
+export { Input, type InputProps } from "./input";
+export {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogFooter,
+  DialogTitle,
+  DialogDescription,
+  DialogPortal,
+  DialogOverlay,
+  DialogClose,
+} from "./dialog";
+export { Badge, badgeVariants, type BadgeProps } from "./badge";
+export { Tabs, TabsList, TabsTrigger, TabsContent } from "./tabs";
+export {
+  Select,
+  SelectGroup,
+  SelectValue,
+  SelectTrigger,
+  SelectContent,
+  SelectItem,
+  SelectSeparator,
+  SelectScrollUpButton,
+  SelectScrollDownButton,
+} from "./select";
+export { Textarea, type TextareaProps } from "./textarea";
+export { Label } from "./label";
+export {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuCheckboxItem,
+  DropdownMenuRadioItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuGroup,
+  DropdownMenuPortal,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuRadioGroup,
+} from "./dropdown-menu";
+export { Switch } from "./switch";
+export {
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+  TooltipProvider,
+} from "./tooltip";
