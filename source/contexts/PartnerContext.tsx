@@ -3,7 +3,7 @@ import { useToast } from './ToastContext';
 import { useNotifications } from './NotificationContext';
 import { BusinessType, BusinessContext, getBusinessContext } from '@/lib/businessContext';
 import type { CashRegisterState } from '../types/cash';
-import type { InventoryControl, StockAlert } from '../types/inventory';
+import type { InventoryControl } from '../types/inventory';
 import type { PrinterConfig } from '../lib/printer';
 import { printOrderReceipt, DEFAULT_PRINTER_CONFIG } from '../lib/printer';
 import { PlanType } from '../data/plans';
@@ -64,7 +64,11 @@ export interface PartnerOrder {
   paymentMethod: string;
   type: 'delivery' | 'pickup' | 'table' | 'booking' | 'event' | 'stay';
   scheduledFor?: string;
-  details?: Record<string, unknown>; // Para armazenar dados específicos (check-in, check-out, mesa, etc)
+  details?: {
+    bookingDate?: string;
+    bookingTime?: string;
+    [key: string]: unknown;
+  };
   createdAt: string; // ISO Date String
 }
 
@@ -158,8 +162,6 @@ interface PartnerContextType {
   // Gestão de Inventário/Estoque (NOVO)
   checkStockAvailability: (productId: number, quantity: number) => boolean;
   deductStock: (productId: number, quantity: number) => void;
-  replenishStock: (productId: number, quantity: number, reason?: string) => void;
-  getStockAlerts: () => StockAlert[];
 
   // Configuração de Impressora (NOVO)
   printerConfig: PrinterConfig;
@@ -205,11 +207,6 @@ const INITIAL_MENU: MenuItem[] = [
   { id: 5, type: 'combo', name: 'Combo Família', price: 120.00, category: 'Pizzas', image: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=200', active: true, description: '2 Pizzas grandes + Refri 2L', comboItems: ['Pizza Calabresa', 'Pizza Margherita', 'Coca-Cola 2L'], isPopular: true },
 ];
 
-const INITIAL_ORDERS: PartnerOrder[] = [
-  { id: '#1234', type: 'delivery', customer: 'João Silva', items: [{ name: 'Pizza Calabresa', qtd: 2, obs: 'Sem cebola' }, { name: 'Coca-Cola 2L', qtd: 1 }], total: 103.80, status: 'pending', time: '19:30', address: 'Rua das Flores, 123 - Apt 402', paymentMethod: 'Cartão de Crédito', createdAt: new Date().toISOString() },
-  { id: '#1235', type: 'booking', customer: 'Ana Souza', items: [{ name: 'Corte de Cabelo', qtd: 1 }], total: 50.00, status: 'preparing', time: '14:00', scheduledFor: 'Hoje, 15:30', address: 'Na Loja', paymentMethod: 'PIX', createdAt: new Date().toISOString() }
-];
-
 const INITIAL_REVIEWS: Review[] = [
   { id: 'r1', customerName: 'Maria Oliveira', rating: 5, comment: 'A melhor pizza da região! Chegou super quente.', date: 'Ontem', reply: 'Obrigado Maria! Ficamos felizes que gostou.' },
   { id: 'r2', customerName: 'Pedro Santos', rating: 4, comment: 'Muito boa, mas demorou um pouco mais que o previsto.', date: '2 dias atrás' },
@@ -228,6 +225,10 @@ const INITIAL_COUPONS: Coupon[] = [
   { id: 'c2', code: 'FRETEGRATIS', discount: 0, type: 'fixed', minOrder: 80, usageLimit: 50, usedCount: 50, active: false, expiryDate: '2024-10-10' },
 ];
 
+/**
+ * Fornecedor de contexto para operações do negócio parceiro
+ * @param children Componentes filhos
+ */
 export const PartnerProvider = ({ children }: { children: ReactNode }) => {
   const [menuItems, setMenuItems] = useState<MenuItem[]>(INITIAL_MENU);
   // Orders agora vem do OrderContext
@@ -278,16 +279,29 @@ export const PartnerProvider = ({ children }: { children: ReactNode }) => {
     addToast('Item adicionado ao catálogo!', 'success');
   };
 
+  /**
+   * Atualiza um item do menu
+   * @param id ID do item
+   * @param data Dados atualizados
+   */
   const updateMenuItem = (id: number, data: Partial<MenuItem>) => {
     setMenuItems(prev => prev.map(item => item.id === id ? { ...item, ...data } : item));
     addToast('Item atualizado.', 'success');
   };
 
+  /**
+   * Remove um item do menu
+   * @param id ID do item a ser removido
+   */
   const deleteMenuItem = (id: number) => {
     setMenuItems(prev => prev.filter(item => item.id !== id));
     addToast('Item removido.', 'info');
   };
 
+  /**
+   * Alterna o status (ativo/inativo) de um item do menu
+   * @param id ID do item
+   */
   const toggleMenuItemStatus = (id: number) => {
     setMenuItems(prev => prev.map(item => {
       if (item.id === id) {
@@ -331,6 +345,133 @@ export const PartnerProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  // --- INVENTORY & SCHEDULING HELPERS ---
+  /**
+   * Verifica se há estoque disponível para um produto
+   * @param productId ID do produto
+   * @param quantity Quantidade desejada
+   * @returns true se há estoque suficiente, false caso contrário
+   */
+  const checkStockAvailability = (productId: number, quantity: number): boolean => {
+    const product = menuItems.find(p => p.id === productId);
+    if (!product) return false;
+    if (!product.inventory || !product.inventory.enabled) return true;
+    return product.inventory.quantity >= quantity;
+  };
+
+  /**
+   * Deduz estoque de um produto (ao aceitar pedido)
+   * @param productId ID do produto
+   * @param quantity Quantidade a deduzir
+   */
+  const deductStock = (productId: number, quantity: number): void => {
+    setMenuItems(prev => prev.map(product => {
+      if (product.id === productId && product.inventory?.enabled) {
+        const newQuantity = product.inventory.quantity - quantity;
+        const updatedProduct = {
+          ...product,
+          inventory: {
+            ...product.inventory,
+            quantity: Math.max(0, newQuantity)
+          },
+          active: newQuantity > 0 ? product.active : false
+        };
+
+        if (newQuantity <= product.inventory.minAlert && newQuantity > 0) {
+          addToast(
+            `⚠️ Estoque baixo: ${product.name} (${newQuantity} unidades)`,
+            'warning'
+          );
+          if (notificationSettings.events.stockLow) {
+            addNotification(
+              'Estoque Baixo',
+              `O produto ${product.name} atingiu o nível de alerta (${newQuantity} restantes).`,
+              'warning',
+              '/portal/menu'
+            );
+          }
+        } else if (newQuantity === 0) {
+          addToast(`🚫 Estoque esgotado: ${product.name}`, 'error');
+        }
+        return updatedProduct;
+      }
+      return product;
+    }));
+  };
+
+  /**
+   * Alterna o bloqueio de um horário específico
+   * @param date Data no formato 'YYYY-MM-DD'
+   * @param time Hora no formato 'HH:mm'
+   */
+  const toggleSlotBlock = (date: string, time: string): void => {
+    setAvailability(prev => {
+      const exists = prev.find(a => a.date === date);
+      if (exists) {
+        const isBlocked = exists.blockedSlots.includes(time);
+        const newSlots = isBlocked
+          ? exists.blockedSlots.filter(s => s !== time)
+          : [...exists.blockedSlots, time];
+
+        if (newSlots.length === 0 && !exists.isFullDay) {
+          return prev.filter(a => a.date !== date);
+        }
+        return prev.map(a => a.date === date ? { ...a, blockedSlots: newSlots } : a);
+      } else {
+        return [...prev, { date, isFullDay: false, blockedSlots: [time] }];
+      }
+    });
+  };
+
+  /**
+   * Verifica se um horário específico está bloqueado
+   * @param date Data no formato 'YYYY-MM-DD'
+   * @param time Hora no formato 'HH:mm'
+   * @returns true se o horário está bloqueado
+   */
+  const isSlotBlocked = (date: string, time: string): boolean => {
+    const entry = availability.find(a => a.date === date);
+    if (!entry) return false;
+    if (entry.isFullDay) return true;
+    return entry.blockedSlots.includes(time);
+  };
+
+  /**
+   * Adiciona uma transação ao caixa
+   * @param type Tipo de transação ('supply' para suprimento ou 'bleed' para sangria)
+   * @param amount Valor da transação
+   * @param description Descrição da transação
+   */
+  const addCashTransaction = (type: 'supply' | 'bleed', amount: number, description: string): void => {
+    setCashRegister(prev => {
+      const newBalance = type === 'supply'
+        ? prev.currentBalance + amount
+        : prev.currentBalance - amount;
+
+      return {
+        ...prev,
+        currentBalance: newBalance,
+        transactions: [{
+          id: Date.now().toString(),
+          type,
+          amount,
+          description,
+          timestamp: new Date(),
+          user: 'Admin'
+        }, ...prev.transactions]
+      };
+    });
+    addToast(
+      type === 'supply' ? 'Suprimento registrado!' : 'Sangria registrada!',
+      'success'
+    );
+  };
+
+  /**
+   * Atualiza status de um pedido com lógica de inventário
+   * @param orderId ID do pedido
+   * @param newStatus Novo status
+   */
   const updateOrderStatus = (orderId: string, newStatus: PartnerOrder['status']) => {
     // Lógica de verificação de estoque e outros efeitos colaterais
     // Precisamos encontrar o pedido no array atual (que vem do context)
@@ -394,7 +535,27 @@ export const PartnerProvider = ({ children }: { children: ReactNode }) => {
 
         // NOVO: Auto-print ao aceitar pedido
         if (printerConfig.autoPrintOnAccept) {
-          printOrderReceipt(order, printerConfig);
+          const orderForPrint = {
+            id: order.id,
+            customerName: order.customer,
+            customerContact: order.address,
+            type: ('delivery' as const),
+            source: ('online' as const),
+            items: order.items.map(i => ({
+              id: i.name,
+              name: i.name,
+              quantity: i.qtd,
+              price: 0,
+              details: i.obs
+            })),
+            total: order.total,
+            status: order.status as any,
+            createdAt: new Date(order.createdAt),
+            paymentMethod: order.paymentMethod as any,
+            chatHistory: [],
+            statusHistory: []
+          };
+          printOrderReceipt(orderForPrint, printerConfig);
           addToast('🖨️ Imprimindo pedido...', 'info');
         }
       }
@@ -429,23 +590,39 @@ export const PartnerProvider = ({ children }: { children: ReactNode }) => {
   };
 
   // --- MARKETING ACTIONS ---
+  /**
+   * Cria um novo cupom de desconto
+   * @param coupon Dados do cupom (sem ID e contador de uso)
+   */
   const addCoupon = (coupon: Omit<Coupon, 'id' | 'usedCount'>) => {
     const newCoupon = { ...coupon, id: `c-${Date.now()}`, usedCount: 0 };
     setCoupons(prev => [newCoupon, ...prev]);
     addToast('Cupom criado com sucesso!', 'success');
   };
 
+  /**
+   * Alterna o status (ativo/inativo) de um cupom
+   * @param id ID do cupom
+   */
   const toggleCouponStatus = (id: string) => {
     setCoupons(prev => prev.map(c => c.id === id ? { ...c, active: !c.active } : c));
     addToast('Status do cupom alterado.', 'info');
   };
 
+  /**
+   * Remove um cupom
+   * @param id ID do cupom a ser removido
+   */
   const deleteCoupon = (id: string) => {
     setCoupons(prev => prev.filter(c => c.id !== id));
     addToast('Cupom excluído.', 'info');
   };
 
   // --- AVAILABILITY ACTIONS ---
+  /**
+   * Alterna o bloqueio de um dia inteiro
+   * @param date Data no formato 'YYYY-MM-DD'
+   */
   const toggleDayBlock = (date: string) => {
     setAvailability(prev => {
       const exists = prev.find(a => a.date === date);
@@ -462,40 +639,16 @@ export const PartnerProvider = ({ children }: { children: ReactNode }) => {
     });
   };
 
-  const toggleSlotBlock = (date: string, time: string) => {
-    setAvailability(prev => {
-      const exists = prev.find(a => a.date === date);
-      if (exists) {
-        const isSlotBlocked = exists.blockedSlots.includes(time);
-        const newSlots = isSlotBlocked
-          ? exists.blockedSlots.filter(s => s !== time)
-          : [...exists.blockedSlots, time];
-
-        // Se não sobrar slots e não for dia inteiro, remove a entrada
-        if (newSlots.length === 0 && !exists.isFullDay) {
-          return prev.filter(a => a.date !== date);
-        }
-
-        return prev.map(a => a.date === date ? { ...a, blockedSlots: newSlots } : a);
-      } else {
-        return [...prev, { date, isFullDay: false, blockedSlots: [time] }];
-      }
-    });
-  };
-
-  const isDateBlocked = (date: string) => {
-    const entry = availability.find(a => a.date === date);
-    return entry ? entry.isFullDay : false;
-  };
-
-  const isSlotBlocked = (date: string, time: string) => {
-    const entry = availability.find(a => a.date === date);
-    if (!entry) return false;
-    if (entry.isFullDay) return true;
-    return entry.blockedSlots.includes(time);
-  };
-
+  /**
+   * Alterna o bloqueio de um horário específico
+   * @param date Data no formato 'YYYY-MM-DD'
+   * @param time Hora no formato 'HH:mm'
+   */
   // --- CASH REGISTER ACTIONS ---
+  /**
+   * Abre o caixa com valor inicial
+   * @param startAmount Valor inicial do caixa
+   */
   const openRegister = (startAmount: number) => {
     setCashRegister({
       isOpen: true,
@@ -514,6 +667,9 @@ export const PartnerProvider = ({ children }: { children: ReactNode }) => {
     addToast('Caixa aberto com sucesso!', 'success');
   };
 
+  /**
+   * Fecha o caixa registrando o saldo final
+   */
   const closeRegister = () => {
     setCashRegister(prev => ({
       ...prev,
@@ -531,167 +687,15 @@ export const PartnerProvider = ({ children }: { children: ReactNode }) => {
     addToast('Caixa fechado com sucesso!', 'success');
   };
 
-  const addCashTransaction = (type: 'supply' | 'bleed', amount: number, description: string) => {
-    setCashRegister(prev => {
-      const newBalance = type === 'supply'
-        ? prev.currentBalance + amount
-        : prev.currentBalance - amount;
-
-      return {
-        ...prev,
-        currentBalance: newBalance,
-        transactions: [{
-          id: Date.now().toString(),
-          type,
-          amount,
-          description,
-          timestamp: new Date(),
-          user: 'Admin'
-        }, ...prev.transactions]
-      };
-    });
-    addToast(
-      type === 'supply' ? 'Suprimento registrado!' : 'Sangria registrada!',
-      'success'
-    );
-  };
-
   // --- INVENTORY/STOCK MANAGEMENT ---
-
   /**
-   * Verifica se há estoque disponível para um produto
-   * @param productId ID do produto
-   * @param quantity Quantidade desejada
-   * @returns true se há estoque suficiente, false caso contrário
+   * Verifica se uma data inteira está bloqueada
+   * @param date Data no formato 'YYYY-MM-DD'
+   * @returns true se a data está bloqueada
    */
-  const checkStockAvailability = (productId: number, quantity: number): boolean => {
-    const product = menuItems.find(p => p.id === productId);
-
-    // Se produto não existe, retorna false
-    if (!product) return false;
-
-    // Se produto não tem controle de inventário, retorna true (sempre disponível)
-    if (!product.inventory || !product.inventory.enabled) return true;
-
-    // Verifica se há estoque suficiente
-    return product.inventory.quantity >= quantity;
-  };
-
-  /**
-   * Deduz estoque de um produto (ao aceitar pedido)
-   * @param productId ID do produto
-   * @param quantity Quantidade a deduzir
-   */
-  const deductStock = (productId: number, quantity: number): void => {
-    setMenuItems(prev => prev.map(product => {
-      if (product.id === productId && product.inventory?.enabled) {
-        const newQuantity = product.inventory.quantity - quantity;
-
-        // Atualiza estoque
-        const updatedProduct = {
-          ...product,
-          inventory: {
-            ...product.inventory,
-            quantity: Math.max(0, newQuantity) // Nunca negativo
-          },
-          // Se estoque = 0, desativa produto automaticamente
-          active: newQuantity > 0 ? product.active : false
-        };
-
-        // Alerta se estoque baixo
-        if (newQuantity <= product.inventory.minAlert && newQuantity > 0) {
-          addToast(
-            `⚠️ Estoque baixo: ${product.name} (${newQuantity} unidades)`,
-            'warning'
-          );
-
-          // NOVO: Notificação persistente de estoque baixo
-          if (notificationSettings.events.stockLow) {
-            addNotification(
-              'Estoque Baixo',
-              `O produto ${product.name} atingiu o nível de alerta (${newQuantity} restantes).`,
-              'warning',
-              '/portal/menu'
-            );
-          }
-        } else if (newQuantity === 0) {
-          addToast(
-            `🚫 Estoque esgotado: ${product.name}`,
-            'error'
-          );
-        }
-
-        return updatedProduct;
-      }
-      return product;
-    }));
-  };
-
-  /**
-   * Repõe estoque de um produto
-   * @param productId ID do produto
-   * @param quantity Quantidade a adicionar
-   * @param reason Motivo da reposição (opcional)
-   */
-  const replenishStock = (productId: number, quantity: number, _reason?: string): void => {
-    setMenuItems(prev => prev.map(product => {
-      if (product.id === productId && product.inventory?.enabled) {
-        const newQuantity = product.inventory.quantity + quantity;
-
-        addToast(
-          `✅ Estoque reposto: ${product.name} (+${quantity} unidades)`,
-          'success'
-        );
-
-        return {
-          ...product,
-          inventory: {
-            ...product.inventory,
-            quantity: newQuantity
-          },
-          // Reativa produto se estava desativado por falta de estoque
-          active: true
-        };
-      }
-      return product;
-    }));
-  };
-
-  /**
-   * Obtém lista de alertas de estoque baixo
-   * @returns Array de alertas de estoque
-   */
-  const getStockAlerts = (): StockAlert[] => {
-    return menuItems
-      .filter(product =>
-        product.inventory?.enabled &&
-        product.inventory.quantity <= product.inventory.minAlert
-      )
-      .map(product => {
-        const currentStock = product.inventory!.quantity;
-        const minAlert = product.inventory!.minAlert;
-
-        // Determina severidade
-        let severity: 'low' | 'critical' | 'out' = 'low';
-        if (currentStock === 0) {
-          severity = 'out';
-        } else if (currentStock < minAlert / 2) {
-          severity = 'critical';
-        }
-
-        return {
-          productId: product.id,
-          productName: product.name,
-          currentStock,
-          minAlert,
-          severity
-        };
-      })
-      .sort((a, b) => {
-        // Ordena por severidade: out > critical > low
-        const severityOrder = { out: 3, critical: 2, low: 1 };
-        return severityOrder[b.severity] - severityOrder[a.severity];
-      });
+  const isDateBlocked = (date: string): boolean => {
+    const entry = availability.find(a => a.date === date);
+    return entry ? entry.isFullDay : false;
   };
 
   // --- PLANS ACTIONS ---
@@ -706,9 +710,10 @@ export const PartnerProvider = ({ children }: { children: ReactNode }) => {
       const isConnected = prev[provider]?.connected;
 
       if (isConnected) {
-        // Desconectar
-        const newIntegrations = { ...prev };
-        delete newIntegrations[provider];
+        // Desconectar - usa filter em vez de delete
+        const newIntegrations = Object.fromEntries(
+          Object.entries(prev).filter(([key]) => key !== provider)
+        );
         addToast(`Integração com ${provider} desconectada.`, 'info');
         return newIntegrations;
       } else {
@@ -744,7 +749,7 @@ export const PartnerProvider = ({ children }: { children: ReactNode }) => {
       coupons, addCoupon, toggleCouponStatus, deleteCoupon,
       availability, toggleDayBlock, toggleSlotBlock, isDateBlocked, isSlotBlocked,
       cashRegister, openRegister, closeRegister, addCashTransaction,
-      checkStockAvailability, deductStock, replenishStock, getStockAlerts,
+      checkStockAvailability, deductStock,
       printerConfig, setPrinterConfig,
       addOrder,
       currentPlan, upgradePlan,

@@ -5,9 +5,8 @@ import { formatCurrency, formatDate } from "./utils";
 export type { PrinterConfig };
 
 export const DEFAULT_PRINTER_CONFIG: PrinterConfig = {
-  printerName: 'default',
   paperWidth: '80mm',
-  fontSize: 'medium',
+  fontSize: 'normal',
   autoPrintOnAccept: false,
   copies: 1,
   showCustomerAddress: true,

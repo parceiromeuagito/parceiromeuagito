@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { formatCurrency } from '../lib/utils';
 import {
   Edit2, Trash2, Plus, Search,

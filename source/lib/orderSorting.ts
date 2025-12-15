@@ -1,5 +1,11 @@
 import { Order } from '../types';
 
+/**
+ * Ordena pedidos de forma inteligente
+ * Prioridade: pendentes → recentes
+ * @param orders Array de pedidos
+ * @returns Array de pedidos ordenado
+ */
 export function sortOrdersIntelligently(orders: Order[]): Order[] {
     return [...orders].sort((a, b) => {
         // 1. Pendentes sempre no topo

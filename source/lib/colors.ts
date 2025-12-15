@@ -1,7 +1,16 @@
 import { BusinessType } from '../types';
 
+/**
+ * Cores de serviço por tipo de negócio
+ */
 export const SERVICE_COLORS: Record<BusinessType, { bg: string; text: string; border: string; icon: string }> = {
-    restaurant: {
+    delivery: {
+        bg: 'bg-green-900/20',
+        text: 'text-green-500',
+        border: 'border-green-900/30',
+        icon: 'text-green-500'
+    },
+    reservation: {
         bg: 'bg-orange-900/20',
         text: 'text-orange-500',
         border: 'border-orange-900/30',
@@ -19,20 +28,25 @@ export const SERVICE_COLORS: Record<BusinessType, { bg: string; text: string; bo
         border: 'border-purple-900/30',
         icon: 'text-purple-500'
     },
-    delivery: {
-        bg: 'bg-green-900/20',
-        text: 'text-green-500',
-        border: 'border-green-900/30',
-        icon: 'text-green-500'
-    },
-    appointments: {
+    scheduling: {
         bg: 'bg-pink-900/20',
         text: 'text-pink-500',
         border: 'border-pink-900/30',
         icon: 'text-pink-500'
+    },
+    ecommerce: {
+        bg: 'bg-indigo-900/20',
+        text: 'text-indigo-500',
+        border: 'border-indigo-900/30',
+        icon: 'text-indigo-500'
     }
 };
 
+/**
+ * Obtém as cores de um tipo de serviço
+ * @param type Tipo de negócio
+ * @returns Cores associadas ao tipo
+ */
 export const getServiceColor = (type: BusinessType) => {
     return SERVICE_COLORS[type] || {
         bg: 'bg-zinc-800',

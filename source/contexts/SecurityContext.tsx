@@ -17,6 +17,7 @@ export type Permission =
     | 'creative:view'
     | 'settings:view' | 'settings:edit'
     | 'team:view' | 'team:edit'
+    | 'system:configure' | 'system:reset'
     | '*'; // Super admin
 
 export const DEFAULT_ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {

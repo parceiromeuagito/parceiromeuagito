@@ -24,6 +24,11 @@ type OutletContext = {
 
 import { sortOrdersIntelligently } from '../lib/orderSorting';
 
+/**
+ * Página de Pedidos
+ * Exibe lista de pedidos em diferentes visualizações (Kanban, Lista, Calendário)
+ * Permite gerenciamento de status, chat e detalhes dos pedidos
+ */
 const Orders = () => {
   const { setSelectedChatOrder, isChatSidebarCollapsed, setIsChatSidebarCollapsed } = useOutletContext<OutletContext>();
   const { config, updateConfig } = useBusinessStore();
@@ -60,6 +65,11 @@ const Orders = () => {
     }
   }, [config.autoAccept, orders, config.printer]);
 
+  /**
+   * Atualiza o status de um pedido e exibe mensagem de confirmação
+   * @param id - ID do pedido
+   * @param newStatus - Novo status do pedido
+   */
   const handleStatusChange = (id: string, newStatus: OrderStatus) => {
     updateOrderStatus(id, newStatus);
 
@@ -71,7 +81,7 @@ const Orders = () => {
       }
     }
 
-    const statusMessages = {
+    const statusMessages: Record<OrderStatus, string> = {
       accepted: 'Solicitação aceita!',
       preparing: 'Iniciado preparo/atendimento.',
       ready: 'Marcado como pronto.',
@@ -79,12 +89,19 @@ const Orders = () => {
       completed: 'Pedido finalizado.',
       rejected: 'Solicitação recusada.',
       pending: 'Retornado para pendente.',
-      cancelled: 'Pedido cancelado.'
+      cancelled: 'Pedido cancelado.',
+      returned: 'Pedido devolvido.',
+      partially_returned: 'Pedido parcialmente devolvido.'
     };
 
     addToast(statusMessages[newStatus] || 'Status atualizado.', newStatus === 'rejected' || newStatus === 'cancelled' ? 'error' : 'success');
   };
 
+  /**
+   * Abre o chat para um pedido específico
+   * @param e - Evento do click
+   * @param order - Objeto do pedido
+   */
   const openChat = (e: React.MouseEvent, order: Order) => {
     e.stopPropagation();
     if (!canUseChat) {
@@ -101,11 +118,19 @@ const Orders = () => {
 
   const [selectedOrderForDetails, setSelectedOrderForDetails] = useState<Order | null>(null);
 
+  /**
+   * Abre modal com detalhes do pedido
+   * @param order - Objeto do pedido
+   */
   const openDetails = (order: Order) => {
     setSelectedOrderForDetails(order);
     setIsDetailsOpen(true);
   };
 
+  /**
+   * Renderiza detalhes específicos do tipo de pedido (delivery, pickup, dine-in)
+   * @param order - Objeto do pedido
+   */
   const renderSpecificDetails = (order: Order) => {
     switch (order.type) {
       case 'hotel':
@@ -132,6 +157,65 @@ const Orders = () => {
       default:
         return null;
     }
+  };
+
+  /**
+   * Alterna entre abas de visualização (active/history)
+   */
+  const handleTabChange = (tab: 'active' | 'history') => {
+    setActiveTab(tab);
+  };
+
+  /**
+   * Alterna modo de visualização (kanban/list/calendar)
+   */
+  const handleViewModeChange = (mode: 'kanban' | 'list' | 'calendar') => {
+    setViewMode(mode);
+  };
+
+  /**
+   * Alterna configuração de aceite automático
+   */
+  const handleAutoAcceptToggle = (checked: boolean) => {
+    updateConfig({ autoAccept: checked });
+    addToast(checked ? 'Aceite automático ativado' : 'Aceite automático desativado', 'success');
+  };
+
+  /**
+   * Fecha modal de detalhes
+   */
+  const handleCloseDetails = () => {
+    setIsDetailsOpen(false);
+  };
+
+  /**
+   * Abre chat a partir do modal de detalhes
+   */
+  const handleOpenChatFromDetails = () => {
+    handleCloseDetails();
+    if (canUseChat && selectedOrderForDetails) {
+      setSelectedChatOrder(selectedOrderForDetails);
+      if (isChatSidebarCollapsed) {
+        setIsChatSidebarCollapsed(false);
+      }
+    }
+  };
+
+  /**
+   * Avança o status do pedido na coluna Kanban
+   */
+  const handleAdvanceStatus = (e: React.MouseEvent, orderId: string, currentStatus: OrderStatus) => {
+    e.stopPropagation();
+    const nextStatus: OrderStatus = currentStatus === 'accepted' ? 'preparing' : currentStatus === 'preparing' ? 'ready' : 'delivering';
+    handleStatusChange(orderId, nextStatus);
+  };
+
+  /**
+   * Completa o pedido a partir da coluna Entrega
+   */
+  const handleCompleteOrder = (e: React.MouseEvent, orderId: string) => {
+    e.stopPropagation();
+    handleStatusChange(orderId, 'completed');
   };
 
   const pendingOrders = orders.filter(o => o.status === 'pending');
@@ -181,10 +265,10 @@ const Orders = () => {
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
                 {ordersByDate[date].map(order => (
-                  <div
+                  <button
                     key={order.id}
                     onClick={() => openDetails(order)}
-                    className="bg-zinc-900 p-4 rounded-xl border border-zinc-800 shadow-sm hover:shadow-md hover:border-zinc-700 transition-all cursor-pointer flex gap-4"
+                    className="bg-zinc-900 p-4 rounded-xl border border-zinc-800 shadow-sm hover:shadow-md hover:border-zinc-700 transition-all cursor-pointer flex gap-4 text-left w-full"
                   >
                     <div className="flex-col items-center justify-center px-3 py-2 bg-zinc-800 rounded-lg text-primary hidden sm:flex">
                       <span className="text-xs font-bold uppercase">{new Date(order.checkIn || order.schedulingDate || order.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
@@ -200,7 +284,7 @@ const Orders = () => {
                       <p className="text-sm text-zinc-500 mb-2">{order.items[0].name} {order.items.length > 1 && `+ ${order.items.length - 1}`}</p>
                       {renderSpecificDetails(order)}
                     </div>
-                  </div>
+                  </button>
                 ))}
               </div>
             </div>
@@ -214,18 +298,9 @@ const Orders = () => {
     <div className="max-w-[1600px] mx-auto pb-10 animate-in fade-in duration-500 h-[calc(100vh-140px)] flex flex-col">
       <OrderDetailsModal
         isOpen={isDetailsOpen}
-        onClose={() => setIsDetailsOpen(false)}
+        onClose={handleCloseDetails}
         order={selectedOrderForDetails}
-        onOpenChat={() => {
-          setIsDetailsOpen(false);
-          if (canUseChat && selectedOrderForDetails) {
-            setSelectedChatOrder(selectedOrderForDetails);
-            if (isChatSidebarCollapsed) {
-              setIsChatSidebarCollapsed(false);
-            }
-          }
-          else addToast("Chat disponível apenas no plano Pro ou superior", "warning");
-        }}
+        onOpenChat={handleOpenChatFromDetails}
       />
 
       {/* Header da Página */}
@@ -235,13 +310,13 @@ const Orders = () => {
           <div className="flex items-center gap-4 mt-1">
             <div className="flex bg-zinc-900 p-1 rounded-lg border border-zinc-800">
               <button
-                onClick={() => setActiveTab('active')}
+                onClick={() => handleTabChange('active')}
                 className={`px-3 py-1.5 rounded-md text-sm font-medium transition-all ${activeTab === 'active' ? 'bg-zinc-800 text-white shadow-sm' : 'text-zinc-400 hover:text-zinc-200'}`}
               >
                 Em Andamento
               </button>
               <button
-                onClick={() => setActiveTab('history')}
+                onClick={() => handleTabChange('history')}
                 className={`px-3 py-1.5 rounded-md text-sm font-medium transition-all ${activeTab === 'history' ? 'bg-zinc-800 text-white shadow-sm' : 'text-zinc-400 hover:text-zinc-200'}`}
               >
                 Histórico
@@ -249,27 +324,27 @@ const Orders = () => {
             </div>
 
             {activeTab === 'active' && (
-              <div className="h-6 w-px bg-zinc-800 hidden lg:block"></div>
+              <div className="h-6 w-px bg-zinc-800 hidden lg:block" />
             )}
 
             {activeTab === 'active' && (
               <div className="flex bg-zinc-900 p-1 rounded-lg border border-zinc-800 hidden lg:flex">
                 <button
-                  onClick={() => setViewMode('kanban')}
+                  onClick={() => handleViewModeChange('kanban')}
                   className={`p-1.5 rounded-md transition-all ${viewMode === 'kanban' ? 'bg-zinc-800 text-primary shadow-sm' : 'text-zinc-400 hover:text-zinc-200'}`}
                   title="Visualização Kanban"
                 >
                   <KanbanIcon className="w-4 h-4" />
                 </button>
                 <button
-                  onClick={() => setViewMode('list')}
+                  onClick={() => handleViewModeChange('list')}
                   className={`p-1.5 rounded-md transition-all ${viewMode === 'list' ? 'bg-zinc-800 text-primary shadow-sm' : 'text-zinc-400 hover:text-zinc-200'}`}
                   title="Visualização Lista"
                 >
                   <LayoutList className="w-4 h-4" />
                 </button>
                 <button
-                  onClick={() => setViewMode('calendar')}
+                  onClick={() => handleViewModeChange('calendar')}
                   className={`p-1.5 rounded-md transition-all ${viewMode === 'calendar' ? 'bg-zinc-800 text-primary shadow-sm' : 'text-zinc-400 hover:text-zinc-200'}`}
                   title="Visualização Calendário"
                 >
@@ -293,10 +368,7 @@ const Orders = () => {
               type="checkbox"
               className="sr-only"
               checked={config.autoAccept}
-              onChange={(e) => {
-                updateConfig({ autoAccept: e.target.checked });
-                addToast(e.target.checked ? 'Aceite automático ativado' : 'Aceite automático desativado', 'warning');
-              }}
+              onChange={(e) => handleAutoAcceptToggle(e.target.checked)}
             />
           </label>
         </div>
@@ -307,7 +379,7 @@ const Orders = () => {
         {activeTab === 'active' && !config.autoAccept && pendingOrders.length > 0 && (
           <div className="mb-6 shrink-0">
             <h3 className="text-sm font-bold text-zinc-300 mb-3 flex items-center gap-2 uppercase tracking-wider">
-              <div className="w-2 h-2 bg-yellow-500 rounded-full animate-pulse"></div>
+              <div className="w-2 h-2 bg-yellow-500 rounded-full animate-pulse" />
               Novas Solicitações ({pendingOrders.length})
             </h3>
             <div className="flex gap-4 overflow-x-auto pb-2 custom-scrollbar">
@@ -425,7 +497,7 @@ const Orders = () => {
                 const colOrders = activeOrders.filter(o => o.status === col.id);
                 return (
                   <div key={col.id} className="flex-1 min-w-[280px] max-w-[350px] flex flex-col h-full">
-                    <div className={`flex items-center justify-between p-3 rounded-t-xl border-b border-zinc-800 bg-zinc-900 mb-2 shadow-sm`}>
+                    <div className="flex items-center justify-between p-3 rounded-t-xl border-b border-zinc-800 bg-zinc-900 mb-2 shadow-sm">
                       <span className={`font-bold text-sm ${col.color}`}>{col.label}</span>
                       <span className="text-xs font-bold bg-zinc-800 text-zinc-400 px-2 py-0.5 rounded-full">
                         {colOrders.length}
@@ -434,11 +506,10 @@ const Orders = () => {
 
                     <div className="flex-1 overflow-y-auto space-y-3 pr-1 custom-scrollbar pb-4">
                       {colOrders.map(order => (
-                        <motion.div
-                          layoutId={order.id}
+                        <motion.button
                           key={order.id}
                           onClick={() => openDetails(order)}
-                          className={`bg-zinc-900 p-4 rounded-xl border-l-2 ${col.borderColor} border-y border-r border-zinc-800 shadow-sm hover:shadow-md hover:border-zinc-700 transition-all cursor-pointer group relative`}
+                          className={`w-full text-left bg-zinc-900 p-4 rounded-xl border-l-2 ${col.borderColor} border-y border-r border-zinc-800 shadow-sm hover:shadow-md hover:border-zinc-700 transition-all cursor-pointer group relative`}
                         >
                           <div className="flex justify-between items-start mb-2">
                             <h4 className="font-bold text-zinc-200 text-sm">{order.customerName}</h4>
@@ -446,8 +517,8 @@ const Orders = () => {
                           </div>
 
                           <div className="text-xs text-zinc-500 mb-3 space-y-1">
-                            {order.items.map((item, idx) => (
-                              <div key={idx} className="flex justify-between">
+                            {order.items.map((item) => (
+                              <div key={`${order.id}-${item.name}`} className="flex justify-between">
                                 <span>{item.quantity}x {item.name}</span>
                               </div>
                             ))}
@@ -475,11 +546,7 @@ const Orders = () => {
                             <div className="flex gap-1">
                               {col.id !== 'delivering' && (
                                 <button
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    const nextStatus = col.id === 'accepted' ? 'preparing' : col.id === 'preparing' ? 'ready' : 'delivering';
-                                    handleStatusChange(order.id, nextStatus);
-                                  }}
+                                  onClick={(e) => handleAdvanceStatus(e, order.id, col.id)}
                                   className="flex items-center gap-1 px-2 py-1 bg-zinc-800 text-zinc-300 rounded-lg text-xs font-bold hover:bg-zinc-700 hover:text-white transition-colors"
                                 >
                                   Avançar <ArrowRight className="w-3 h-3" />
@@ -487,7 +554,7 @@ const Orders = () => {
                               )}
                               {col.id === 'delivering' && (
                                 <button
-                                  onClick={(e) => { e.stopPropagation(); handleStatusChange(order.id, 'completed'); }}
+                                  onClick={(e) => handleCompleteOrder(e, order.id)}
                                   className="flex items-center gap-1 px-2 py-1 bg-green-600 text-white rounded-lg text-xs font-bold hover:bg-green-700 transition-colors"
                                 >
                                   Concluir <Check className="w-3 h-3" />
@@ -495,7 +562,7 @@ const Orders = () => {
                               )}
                             </div>
                           </div>
-                        </motion.div>
+                        </motion.button>
                       ))}
                     </div>
                   </div>
@@ -505,10 +572,10 @@ const Orders = () => {
           ) : (
             <div className="h-full overflow-y-auto p-4 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 content-start custom-scrollbar">
               {activeOrders.map((order) => (
-                <div
+                <button
                   key={order.id}
                   onClick={() => openDetails(order)}
-                  className="bg-zinc-900 p-5 rounded-xl border border-zinc-800 shadow-sm hover:shadow-md transition-all cursor-pointer"
+                  className="bg-zinc-900 p-5 rounded-xl border border-zinc-800 shadow-sm hover:shadow-md transition-all cursor-pointer text-left"
                 >
                   <div className="flex justify-between items-start mb-3">
                     <span className={`px-2 py-1 rounded text-xs font-bold uppercase tracking-wider
@@ -542,7 +609,7 @@ const Orders = () => {
                       Avançar
                     </button>
                   </div>
-                </div>
+                </button>
               ))}
             </div>
           )}

@@ -1,4 +1,3 @@
-import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, User, Phone, CreditCard, MessageCircle, Printer, Globe, Store, Check, Ban, ArrowRight } from 'lucide-react';
 import { Order, OrderStatus } from '../../types';
@@ -16,6 +15,10 @@ interface OrderDetailsModalProps {
     onOpenChat: () => void;
 }
 
+/**
+ * Modal com detalhes completos do pedido
+ * @param props Props do modal
+ */
 export function OrderDetailsModal({ isOpen, onClose, order, onOpenChat }: OrderDetailsModalProps) {
     const { addToast } = useToast();
     const { config } = useBusinessStore();
@@ -23,6 +26,9 @@ export function OrderDetailsModal({ isOpen, onClose, order, onOpenChat }: OrderD
 
     if (!order) return null;
 
+    /**
+     * Imprime o recibo do pedido
+     */
     const handlePrint = () => {
         try {
             printOrderReceipt(order, config.printer);
@@ -32,18 +38,30 @@ export function OrderDetailsModal({ isOpen, onClose, order, onOpenChat }: OrderD
         }
     };
 
+    /**
+     * Atualiza o status do pedido
+     * @param newStatus Novo status do pedido
+     */
     const handleStatusChange = (newStatus: OrderStatus) => {
         updateOrderStatus(order.id, newStatus);
         addToast(`Pedido ${newStatus === 'accepted' ? 'aceito' : newStatus === 'rejected' ? 'recusado' : 'atualizado'}!`, 'success');
         onClose();
     };
 
+    /**
+     * Retorna o ícone correspondente à fonte do pedido
+     * @param source Fonte do pedido
+     */
     const getSourceIcon = (source: string) => {
         if (source === 'counter') return <Store className="w-4 h-4" />;
         if (source.includes('marketplace')) return <Globe className="w-4 h-4" />;
         return <User className="w-4 h-4" />;
     };
 
+    /**
+     * Retorna o rótulo correspondente à fonte do pedido
+     * @param source Fonte do pedido
+     */
     const getSourceLabel = (source: string) => {
         if (source === 'counter') return 'Balcão (Presencial)';
         if (source === 'marketplace_ifood') return 'iFood';
@@ -125,8 +143,8 @@ export function OrderDetailsModal({ isOpen, onClose, order, onOpenChat }: OrderD
                                 <section>
                                     <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider mb-4">Itens do Pedido</h3>
                                     <div className="bg-gray-50 rounded-2xl border border-gray-100 overflow-hidden">
-                                        {order.items.map((item, idx) => (
-                                            <div key={idx} className="flex justify-between items-center p-4 border-b border-gray-100 last:border-0">
+                                        {order.items.map((item) => (
+                                            <div key={`${item.id}-${item.name}`} className="flex justify-between items-center p-4 border-b border-gray-100 last:border-0">
                                                 <div className="flex items-center gap-3">
                                                     <span className="w-8 h-8 flex items-center justify-center bg-white rounded-lg border border-gray-200 text-sm font-bold text-gray-700">
                                                         {item.quantity}x

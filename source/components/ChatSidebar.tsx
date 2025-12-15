@@ -10,6 +10,10 @@ interface ChatSidebarProps {
     externalSelectedOrder?: Order | null;
 }
 
+/**
+ * Sidebar lateral para chat de pedidos
+ * @param props Props do componente
+ */
 const ChatSidebar = ({ isCollapsed = false, onToggleCollapse, externalSelectedOrder }: ChatSidebarProps) => {
     const { orders, addOrderMessage } = useOrderStore();
     const [searchTerm, setSearchTerm] = useState('');
@@ -17,6 +21,11 @@ const ChatSidebar = ({ isCollapsed = false, onToggleCollapse, externalSelectedOr
     const [messageInput, setMessageInput] = useState('');
     const messagesEndRef = useRef<HTMLDivElement>(null);
 
+    /**
+     * Envia mensagem para um pedido
+     * @param orderId ID do pedido
+     * @param content Conteúdo da mensagem
+     */
     const onSendMessage = (orderId: string, content: string) => {
         const newMessage: Message = {
             id: Date.now().toString(),
@@ -57,6 +66,9 @@ const ChatSidebar = ({ isCollapsed = false, onToggleCollapse, externalSelectedOr
         order?.id?.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
+    /**
+     * Envia mensagem digitada
+     */
     const handleSendClick = () => {
         if (messageInput.trim() && activeChatOrder && onSendMessage) {
             onSendMessage(activeChatOrder.id, messageInput);
@@ -64,11 +76,18 @@ const ChatSidebar = ({ isCollapsed = false, onToggleCollapse, externalSelectedOr
         }
     };
 
+    /**
+     * Abre chat de um pedido específico
+     * @param order Pedido a abrir chat
+     */
     const handleChatClick = (order: Order) => {
         setActiveChatOrder(order);
         setSearchTerm('');
     };
 
+    /**
+     * Volta para lista de chats
+     */
     const handleBackToList = () => {
         setActiveChatOrder(null);
     };

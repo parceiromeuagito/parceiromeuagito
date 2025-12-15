@@ -12,6 +12,9 @@ import { useToast } from '../contexts/ToastContext';
 import { Order } from '../types';
 import PaymentModal from '../components/pos/PaymentModal';
 
+/**
+ * Página do Sistema de Ponto de Venda (POS)
+ */
 const POS = () => {
     const { catalog } = useCatalogStore();
     const { addOrder } = useOrderStore();
@@ -38,6 +41,9 @@ const POS = () => {
         return matchesSearch && matchesCategory && item.available;
     });
 
+    /**
+     * Abre o modal de pagamento
+     */
     const handleOpenPayment = () => {
         if (cart.length === 0) {
             addToast('Carrinho vazio', 'warning');
@@ -54,6 +60,12 @@ const POS = () => {
 
     // Keyboard Shortcuts
     useEffect(() => {
+        /**
+         * Atalhos de teclado para POS
+         * F2: Foco na busca
+         * F9: Abrir pagamento
+         * ESC: Cancelar operação
+         */
         const handleKeyDown = (e: KeyboardEvent) => {
             if (e.key === 'F2') {
                 e.preventDefault();
@@ -80,6 +92,9 @@ const POS = () => {
         return () => window.removeEventListener('keydown', handleKeyDown);
     }, [cart, isPaymentModalOpen, cashRegister.isOpen]);
 
+    /**
+     * Confirma o pagamento e finaliza a venda
+     */
     const handleConfirmPayment = () => {
         try {
             if (!paymentDetails) {
@@ -111,7 +126,12 @@ const POS = () => {
                     installments: paymentDetails.installments,
                     payments: paymentDetails.payments
                 },
-                chatHistory: []
+                chatHistory: [],
+                statusHistory: [{
+                    status: 'completed',
+                    timestamp: new Date(),
+                    user: 'POS'
+                }]
             };
 
             addOrder(newOrder);

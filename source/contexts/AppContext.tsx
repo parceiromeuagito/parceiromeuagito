@@ -33,6 +33,10 @@ const DEFAULT_PARTNER_USER: User = {
     role: 'admin'
 };
 
+/**
+ * Provider para contexto global de aplicação
+ * @param props Props incluindo children
+ */
 export function AppProvider({ children }: { children: React.ReactNode }) {
     const [currentUser, setCurrentUser] = useState<User | null>(null);
     const [isLoading, setIsLoading] = useState(true);
@@ -70,8 +74,13 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         setIsLoading(false);
     }, []);
 
-    // Login (mock para desenvolvimento)
-    const login = async (email: string, password: string): Promise<boolean> => {
+    /**
+     * Autentica usuário (mock para desenvolvimento)
+     * @param email Email do usuário
+     * @param password Senha do usuário
+     * @returns Promise com resultado da autenticação
+     */
+    const login = async (email: string): Promise<boolean> => {
         setIsLoading(true);
 
         // Simulação de autenticação
@@ -104,6 +113,9 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         });
     };
 
+    /**
+     * Desautentica usuário
+     */
     const logout = () => {
         setIsLoading(true);
         setTimeout(() => {
@@ -118,6 +130,10 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         }, 300);
     };
 
+    /**
+     * Atualiza perfil do usuário atual
+     * @param updates Atualizações de perfil
+     */
     const updateUserProfile = (updates: Partial<User>) => {
         if (!currentUser) return;
 
@@ -128,6 +144,9 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         addToast('Perfil atualizado com sucesso!', 'success');
     };
 
+    /**
+     * Alterna entre temas claro e escuro
+     */
     const toggleTheme = () => {
         const newTheme = theme === 'light' ? 'dark' : 'light';
         setTheme(newTheme);
@@ -163,6 +182,10 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     );
 }
 
+/**
+ * Hook para acessar contexto global de aplicação
+ * @returns Contexto da aplicação
+ */
 export function useApp() {
     const context = useContext(AppContext);
     if (context === undefined) {

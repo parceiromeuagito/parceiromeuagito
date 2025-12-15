@@ -1,3 +1,9 @@
+/**
+ * Carrega dados do localStorage
+ * @param key Chave para armazenamento
+ * @param fallback Valor padrão se não encontrado
+ * @returns Dados do localStorage ou fallback
+ */
 export const loadData = <T>(key: string, fallback: T): T => {
     try {
         const saved = localStorage.getItem(key);

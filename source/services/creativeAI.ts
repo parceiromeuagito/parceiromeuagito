@@ -10,6 +10,9 @@ export interface CampaignDraft {
 
 export type InsightType = 'rainy_day' | 'slow_sales' | 'peak_hour' | 'holiday' | 'low_ticket' | 'churn_risk';
 
+/**
+ * Serviço de IA criativa para gerar campanhas de marketing
+ */
 export class CreativeAIService {
     static generateCampaign(
         insightType: InsightType,
@@ -26,7 +29,7 @@ export class CreativeAIService {
         return randomTemplate;
     }
 
-    private static getTemplates(type: InsightType, business: BusinessType, product: string): CampaignDraft[] {
+    private static getTemplates(type: InsightType, _business: BusinessType, product: string): CampaignDraft[] {
         // Base de Conhecimento Criativa (Simulada)
 
         if (type === 'rainy_day') {
