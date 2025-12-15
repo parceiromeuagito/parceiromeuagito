@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useCatalogStore } from '../store/useCatalogStore';
 import { useOrderStore } from '../store/useOrderStore';
 import { useCashRegisterStore } from '../store/useCashRegisterStore';
@@ -44,7 +44,7 @@ const POS = () => {
     /**
      * Abre o modal de pagamento
      */
-    const handleOpenPayment = () => {
+    const handleOpenPayment = useCallback(() => {
         if (cart.length === 0) {
             addToast('Carrinho vazio', 'warning');
             return;
@@ -56,7 +56,12 @@ const POS = () => {
         }
 
         setIsPaymentModalOpen(true);
-    };
+    }, [cart.length, cashRegister.isOpen, addToast]);
+
+    // Handler for closing payment modal
+    const handleClosePaymentModal = useCallback(() => {
+        setIsPaymentModalOpen(false);
+    }, []);
 
     // Keyboard Shortcuts
     useEffect(() => {
@@ -95,7 +100,7 @@ const POS = () => {
     /**
      * Confirma o pagamento e finaliza a venda
      */
-    const handleConfirmPayment = () => {
+    const handleConfirmPayment = useCallback(() => {
         try {
             if (!paymentDetails) {
                 addToast('Detalhes do pagamento inválidos', 'error');
@@ -142,14 +147,14 @@ const POS = () => {
             addToast('Erro ao finalizar venda', 'error');
             console.error(error);
         }
-    };
+    }, [paymentDetails, selectedCustomer, cart, getTotal, addOrder, addToast, clearSale]);
 
     return (
         <div className="flex h-[calc(100vh-4rem)] gap-4 p-4 overflow-hidden bg-black/95">
 
             <PaymentModal
                 isOpen={isPaymentModalOpen}
-                onClose={() => setIsPaymentModalOpen(false)}
+                onClose={handleClosePaymentModal}
                 onConfirm={handleConfirmPayment}
                 total={getTotal()}
             />

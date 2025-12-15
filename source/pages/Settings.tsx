@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useBusinessStore } from '../store/useBusinessStore';
 import { BusinessType, PlanTier, IntegrationConfig } from '../types';
 import { PLANS } from '../data/plans';
@@ -165,31 +165,72 @@ const Settings = () => {
     authorize('system:configure', () => {
       // Access granted
     });
-  }, []);
+  }, [authorize]);
 
-  const handleSave = () => {
+  const handleSave = useCallback(() => {
     addToast('Configurações salvas com sucesso!', 'success');
-  };
+  }, [addToast]);
 
-  const handleToggle = (type: BusinessType) => {
+  const handleToggle = useCallback((type: BusinessType) => {
     toggleBusinessType(type);
-  };
+  }, [toggleBusinessType]);
 
-  const handlePlanChange = (planId: PlanTier) => {
+  const handlePlanChange = useCallback((planId: PlanTier) => {
     updatePlan(planId);
     addToast(`Plano alterado para ${PLANS[planId].name}!`, 'success');
-  };
+  }, [updatePlan, addToast]);
 
-  const handleIntegrationToggle = (id: string) => {
+  const handleIntegrationToggle = useCallback((id: string) => {
     toggleIntegration(id, 'sk_test_123456');
     addToast('Status da integração atualizado', 'info');
-  };
+  }, [toggleIntegration, addToast]);
 
-  const handleTestPrint = () => {
+  const handleTestPrint = useCallback(() => {
     const mockOrder = getMockOrders(config.businessTypes)[0];
     printOrderReceipt(mockOrder, config.printer);
     addToast('Enviado para impressão de teste', 'success');
-  };
+  }, [config.businessTypes, config.printer, addToast]);
+
+  // Tab handlers
+  const handleTabGeneral = useCallback(() => setActiveTab('general'), []);
+  const handleTabPrinter = useCallback(() => setActiveTab('printer'), []);
+  const handleTabIntegrations = useCallback(() => setActiveTab('integrations'), []);
+  const handleTabPlans = useCallback(() => setActiveTab('plans'), []);
+  const handleTabTeam = useCallback(() => setActiveTab('team'), []);
+
+  // Paper width handlers
+  const handlePaperWidth58 = useCallback(() => {
+    updateConfig({ printer: { ...config.printer, paperWidth: '58mm' } });
+  }, [updateConfig, config.printer]);
+
+  const handlePaperWidth80 = useCallback(() => {
+    updateConfig({ printer: { ...config.printer, paperWidth: '80mm' } });
+  }, [updateConfig, config.printer]);
+
+  // Primary type handlers
+  const handleSetDelivery = useCallback(() => setPrimaryType('delivery'), [setPrimaryType]);
+  const handleSetReservation = useCallback(() => setPrimaryType('reservation'), [setPrimaryType]);
+  const handleSetHotel = useCallback(() => setPrimaryType('hotel'), [setPrimaryType]);
+  const handleSetTickets = useCallback(() => setPrimaryType('tickets'), [setPrimaryType]);
+  const handleSetScheduling = useCallback(() => setPrimaryType('scheduling'), [setPrimaryType]);
+  const handleSetEcommerce = useCallback(() => setPrimaryType('ecommerce'), [setPrimaryType]);
+
+  // Toggle handlers
+  const handleToggleDelivery = useCallback(() => handleToggle('delivery'), [handleToggle]);
+  const handleToggleReservation = useCallback(() => handleToggle('reservation'), [handleToggle]);
+  const handleToggleHotel = useCallback(() => handleToggle('hotel'), [handleToggle]);
+  const handleToggleTickets = useCallback(() => handleToggle('tickets'), [handleToggle]);
+  const handleToggleScheduling = useCallback(() => handleToggle('scheduling'), [handleToggle]);
+  const handleToggleEcommerce = useCallback(() => handleToggle('ecommerce'), [handleToggle]);
+
+  // Reset handler
+  const handleReset = useCallback(() => {
+    authorize('system:reset', () => {
+      if (window.confirm('Tem certeza? Todos os dados serão apagados.')) {
+        resetSystem();
+      }
+    });
+  }, [authorize, resetSystem]);
 
   return (
     <div className="max-w-5xl mx-auto space-y-8 pb-20 animate-in fade-in duration-500">
@@ -205,31 +246,31 @@ const Settings = () => {
         </div>
         <div className="flex gap-2 w-full md:w-auto overflow-x-auto custom-scrollbar pb-2 md:pb-0">
           <button
-            onClick={() => setActiveTab('general')}
+            onClick={handleTabGeneral}
             className={`flex-1 px-4 py-2 rounded-lg font-medium transition-colors whitespace-nowrap ${activeTab === 'general' ? 'bg-white text-black' : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700'}`}
           >
             Geral
           </button>
           <button
-            onClick={() => setActiveTab('printer')}
+            onClick={handleTabPrinter}
             className={`flex-1 px-4 py-2 rounded-lg font-medium transition-colors whitespace-nowrap ${activeTab === 'printer' ? 'bg-white text-black' : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700'}`}
           >
             Impressão
           </button>
           <button
-            onClick={() => setActiveTab('integrations')}
+            onClick={handleTabIntegrations}
             className={`flex-1 px-4 py-2 rounded-lg font-medium transition-colors whitespace-nowrap ${activeTab === 'integrations' ? 'bg-white text-black' : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700'}`}
           >
             Integrações
           </button>
           <button
-            onClick={() => setActiveTab('plans')}
+            onClick={handleTabPlans}
             className={`flex-1 px-4 py-2 rounded-lg font-medium transition-colors whitespace-nowrap ${activeTab === 'plans' ? 'bg-white text-black' : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700'}`}
           >
             Planos
           </button>
           <button
-            onClick={() => setActiveTab('team')}
+            onClick={handleTabTeam}
             className={`flex-1 px-4 py-2 rounded-lg font-medium transition-colors whitespace-nowrap ${activeTab === 'team' ? 'bg-white text-black' : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700'}`}
           >
             Equipe
@@ -253,7 +294,7 @@ const Settings = () => {
                   <label className="block text-sm font-medium text-zinc-400 mb-2">Largura do Papel</label>
                   <div className="grid grid-cols-2 gap-4">
                     <button
-                      onClick={() => updateConfig({ printer: { ...config.printer, paperWidth: '58mm' } })}
+                      onClick={handlePaperWidth58}
                       className={`p-4 rounded-xl border-2 flex flex-col items-center gap-2 transition-all ${config.printer.paperWidth === '58mm' ? 'border-primary bg-primary/10 text-primary' : 'border-zinc-800 text-zinc-400 hover:border-primary/50'}`}
                     >
                       <FileText className="w-6 h-6" />
@@ -261,7 +302,7 @@ const Settings = () => {
                       <span className="text-xs opacity-70">Padrão Mini</span>
                     </button>
                     <button
-                      onClick={() => updateConfig({ printer: { ...config.printer, paperWidth: '80mm' } })}
+                      onClick={handlePaperWidth80}
                       className={`p-4 rounded-xl border-2 flex flex-col items-center gap-2 transition-all ${config.printer.paperWidth === '80mm' ? 'border-primary bg-primary/10 text-primary' : 'border-zinc-800 text-zinc-400 hover:border-primary/50'}`}
                     >
                       <FileText className="w-8 h-8" />
@@ -399,7 +440,7 @@ const Settings = () => {
                 <Globe className="w-12 h-12 text-zinc-700 mx-auto mb-4" />
                 <h4 className="font-bold text-white">Integrações Bloqueadas</h4>
                 <p className="text-sm text-zinc-500 mb-4">Faça upgrade para o plano PRO para conectar iFood, Booking e outros.</p>
-                <button onClick={() => setActiveTab('plans')} className="px-4 py-2 bg-primary text-white rounded-lg font-bold text-sm">Ver Planos</button>
+                <button onClick={handleTabPlans} className="px-4 py-2 bg-primary text-white rounded-lg font-bold text-sm">Ver Planos</button>
               </div>
             }>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -453,12 +494,12 @@ const Settings = () => {
               </div>
 
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
-                <BusinessTypeCard type="delivery" isSelected={config.primaryType === 'delivery'} icon={Truck} onClick={() => setPrimaryType('delivery')} />
-                <BusinessTypeCard type="reservation" isSelected={config.primaryType === 'reservation'} icon={UtensilsCrossed} onClick={() => setPrimaryType('reservation')} />
-                <BusinessTypeCard type="hotel" isSelected={config.primaryType === 'hotel'} icon={BedDouble} onClick={() => setPrimaryType('hotel')} />
-                <BusinessTypeCard type="tickets" isSelected={config.primaryType === 'tickets'} icon={Ticket} onClick={() => setPrimaryType('tickets')} />
-                <BusinessTypeCard type="scheduling" isSelected={config.primaryType === 'scheduling'} icon={Calendar} onClick={() => setPrimaryType('scheduling')} />
-                <BusinessTypeCard type="ecommerce" isSelected={config.primaryType === 'ecommerce'} icon={ShoppingBag} onClick={() => setPrimaryType('ecommerce')} />
+                <BusinessTypeCard type="delivery" isSelected={config.primaryType === 'delivery'} icon={Truck} onClick={handleSetDelivery} />
+                <BusinessTypeCard type="reservation" isSelected={config.primaryType === 'reservation'} icon={UtensilsCrossed} onClick={handleSetReservation} />
+                <BusinessTypeCard type="hotel" isSelected={config.primaryType === 'hotel'} icon={BedDouble} onClick={handleSetHotel} />
+                <BusinessTypeCard type="tickets" isSelected={config.primaryType === 'tickets'} icon={Ticket} onClick={handleSetTickets} />
+                <BusinessTypeCard type="scheduling" isSelected={config.primaryType === 'scheduling'} icon={Calendar} onClick={handleSetScheduling} />
+                <BusinessTypeCard type="ecommerce" isSelected={config.primaryType === 'ecommerce'} icon={ShoppingBag} onClick={handleSetEcommerce} />
               </div>
 
               <div className="flex items-center justify-between mb-4">
@@ -471,18 +512,18 @@ const Settings = () => {
                     Adicione funcionalidades extras ao seu negócio. Seu plano <strong>{PLANS[config.plan].name}</strong> permite até <strong>{PLANS[config.plan].maxBusinessTypes}</strong> extensões.
                   </p>
                 </div>
-                <button onClick={() => setActiveTab('plans')} className="text-xs font-bold text-primary hover:underline">
+                <button onClick={handleTabPlans} className="text-xs font-bold text-primary hover:underline">
                   Aumentar Limite
                 </button>
               </div>
 
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-                <BusinessTypeCard type="delivery" isSelected={config.businessTypes.includes('delivery')} icon={Truck} onClick={() => handleToggle('delivery')} />
-                <BusinessTypeCard type="reservation" isSelected={config.businessTypes.includes('reservation')} icon={UtensilsCrossed} onClick={() => handleToggle('reservation')} />
-                <BusinessTypeCard type="hotel" isSelected={config.businessTypes.includes('hotel')} icon={BedDouble} onClick={() => handleToggle('hotel')} />
-                <BusinessTypeCard type="tickets" isSelected={config.businessTypes.includes('tickets')} icon={Ticket} onClick={() => handleToggle('tickets')} />
-                <BusinessTypeCard type="scheduling" isSelected={config.businessTypes.includes('scheduling')} icon={Calendar} onClick={() => handleToggle('scheduling')} />
-                <BusinessTypeCard type="ecommerce" isSelected={config.businessTypes.includes('ecommerce')} icon={ShoppingBag} onClick={() => handleToggle('ecommerce')} />
+                <BusinessTypeCard type="delivery" isSelected={config.businessTypes.includes('delivery')} icon={Truck} onClick={handleToggleDelivery} />
+                <BusinessTypeCard type="reservation" isSelected={config.businessTypes.includes('reservation')} icon={UtensilsCrossed} onClick={handleToggleReservation} />
+                <BusinessTypeCard type="hotel" isSelected={config.businessTypes.includes('hotel')} icon={BedDouble} onClick={handleToggleHotel} />
+                <BusinessTypeCard type="tickets" isSelected={config.businessTypes.includes('tickets')} icon={Ticket} onClick={handleToggleTickets} />
+                <BusinessTypeCard type="scheduling" isSelected={config.businessTypes.includes('scheduling')} icon={Calendar} onClick={handleToggleScheduling} />
+                <BusinessTypeCard type="ecommerce" isSelected={config.businessTypes.includes('ecommerce')} icon={ShoppingBag} onClick={handleToggleEcommerce} />
               </div>
             </section>
 
@@ -518,13 +559,7 @@ const Settings = () => {
                 Se você deseja reiniciar todos os dados de demonstração (pedidos, catálogo e configurações), clique abaixo. Esta ação é irreversível.
               </p>
               <button
-                onClick={() => {
-                  authorize('system:reset', () => {
-                    if (window.confirm('Tem certeza? Todos os dados serão apagados.')) {
-                      resetSystem();
-                    }
-                  });
-                }}
+                onClick={handleReset}
                 className="px-4 py-2 bg-red-900/20 border border-red-900/30 text-red-400 font-bold rounded-lg hover:bg-red-900/40 transition-colors text-sm"
               >
                 Resetar Sistema
