@@ -1,21 +1,31 @@
-import React, { useState } from 'react';
-import { useCustomerStore } from '../store/useCustomerStore';
-import { formatCurrency, formatDate } from '../lib/utils';
-import { Search, User, Phone, Mail, Star, MoreHorizontal, Filter } from 'lucide-react';
-import { motion } from 'framer-motion';
-import { EmptyState } from '../components/ui/EmptyState';
+import React, { useState } from "react";
+import { useCustomerStore } from "../store/useCustomerStore";
+import { formatCurrency, formatDate } from "../lib/utils";
+import {
+  Search,
+  User,
+  Phone,
+  Mail,
+  Star,
+  MoreHorizontal,
+  Filter,
+} from "lucide-react";
+import { motion } from "framer-motion";
+import { EmptyState } from "../components/ui/EmptyState";
 
 const Customers = () => {
   const { customers } = useCustomerStore();
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filter, setFilter] = useState<'all' | 'vip' | 'active'>('all');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filter, setFilter] = useState<"all" | "vip" | "active">("all");
 
-  const filteredCustomers = customers.filter(c => {
-    const matchesSearch = c.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  const filteredCustomers = customers.filter((c) => {
+    const matchesSearch =
+      c.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       c.phone.includes(searchTerm);
-    const matchesFilter = filter === 'all' ||
-      (filter === 'vip' && c.totalSpent > 1000) ||
-      (filter === 'active' && c.status === 'active');
+    const matchesFilter =
+      filter === "all" ||
+      (filter === "vip" && c.totalSpent > 1000) ||
+      (filter === "active" && c.status === "active");
     return matchesSearch && matchesFilter;
   });
 
@@ -24,7 +34,9 @@ const Customers = () => {
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
           <h2 className="text-2xl font-bold text-white">Gestão de Clientes</h2>
-          <p className="text-zinc-400">Visualize o histórico e gerencie o relacionamento com seus clientes.</p>
+          <p className="text-zinc-400">
+            Visualize o histórico e gerencie o relacionamento com seus clientes.
+          </p>
         </div>
         <div className="flex gap-2 w-full md:w-auto">
           <div className="relative flex-1 md:w-64">
@@ -65,9 +77,10 @@ const Customers = () => {
                       <EmptyState
                         icon={<User className="w-8 h-8" />}
                         title="Nenhum cliente encontrado"
-                        description={searchTerm
-                          ? `Não encontramos clientes correspondentes a "${searchTerm}".`
-                          : "Sua base de clientes aparecerá aqui."
+                        description={
+                          searchTerm
+                            ? `Não encontramos clientes correspondentes a "${searchTerm}".`
+                            : "Sua base de clientes aparecerá aqui."
                         }
                       />
                     </div>
@@ -75,16 +88,24 @@ const Customers = () => {
                 </tr>
               ) : (
                 filteredCustomers.map((customer) => (
-                  <tr key={customer.id} className="hover:bg-zinc-800/50 transition-colors group">
+                  <tr
+                    key={customer.id}
+                    className="hover:bg-zinc-800/50 transition-colors group"
+                  >
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
                         <img
-                          src={customer.avatar || `https://ui-avatars.com/api/?name=${customer.name}&background=random`}
+                          src={
+                            customer.avatar ||
+                            `https://ui-avatars.com/api/?name=${customer.name}&background=random`
+                          }
                           alt={customer.name}
                           className="w-10 h-10 rounded-full object-cover border border-zinc-700"
                         />
                         <div>
-                          <p className="font-bold text-white">{customer.name}</p>
+                          <p className="font-bold text-white">
+                            {customer.name}
+                          </p>
                           {customer.totalSpent > 1000 && (
                             <span className="inline-flex items-center gap-1 text-[10px] font-bold text-amber-500 bg-amber-900/20 px-1.5 py-0.5 rounded mt-0.5 border border-amber-900/30">
                               <Star className="w-3 h-3 fill-current" /> VIP
@@ -106,8 +127,13 @@ const Customers = () => {
                       </div>
                     </td>
                     <td className="px-6 py-4">
-                      <span className={`px-2.5 py-1 rounded-full text-xs font-bold capitalize ${customer.status === 'active' ? 'bg-green-900/20 text-green-400 border border-green-900/30' : 'bg-zinc-800 text-zinc-400 border border-zinc-700'
-                        }`}>
+                      <span
+                        className={`px-2.5 py-1 rounded-full text-xs font-bold capitalize ${
+                          customer.status === "active"
+                            ? "bg-green-900/20 text-green-400 border border-green-900/30"
+                            : "bg-zinc-800 text-zinc-400 border border-zinc-700"
+                        }`}
+                      >
                         {customer.status}
                       </span>
                     </td>
@@ -118,7 +144,11 @@ const Customers = () => {
                       {formatCurrency(customer.totalSpent)}
                     </td>
                     <td className="px-6 py-4 text-zinc-500">
-                      {formatDate(new Date(customer.lastOrderDate)).split(' ')[0]}
+                      {
+                        formatDate(new Date(customer.lastOrderDate)).split(
+                          " ",
+                        )[0]
+                      }
                     </td>
                     <td className="px-6 py-4 text-right">
                       <button className="p-2 hover:bg-zinc-800 rounded-lg text-zinc-500 hover:text-white transition-colors">
