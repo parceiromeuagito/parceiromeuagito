@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { formatCurrency } from '../lib/utils';
 import {
   Edit2, Trash2, Plus, Search,
-  Bed, Tag, Package, Clock, Briefcase
+  Bed, Tag, Package, Clock
 } from 'lucide-react';
 import { useBusinessStore, getBusinessContext } from '../store/useBusinessStore';
 import { useCatalogStore } from '../store/useCatalogStore';

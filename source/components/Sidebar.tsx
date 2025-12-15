@@ -26,7 +26,6 @@ import {
   User,
   Shield,
   UserCog,
-  LucideIcon,
 } from 'lucide-react';
 import { useState } from 'react';
 import CashRegisterModal from './CashRegisterModal';
@@ -38,21 +37,22 @@ interface SidebarProps {
   onToggleCollapse: () => void;
 }
 
-interface NavItem {
-  icon: LucideIcon;
-  label: string;
-  path: string;
-  badge?: number;
-  badgeText?: string;
-  permission: Permission;
-}
+// Interface disponível para uso futuro
+// interface NavItem {
+//   icon: LucideIcon;
+//   label: string;
+//   path: string;
+//   badge?: number;
+//   badgeText?: string;
+//   permission: Permission;
+// }
 
 const Sidebar = ({ isOpen, onClose, isCollapsed, onToggleCollapse }: SidebarProps) => {
   const navigate = useNavigate();
   const { config } = useBusinessStore();
   const { cashRegister } = useCashRegisterStore();
   const { currentUser, logout } = useSecurity();
-  const { canAccessRoute, isAdmin, isManager, isCashier } = usePermissions();
+  const { canAccessRoute } = usePermissions();
   const context = getBusinessContext(config.businessTypes, config);
   const currentPlan = PLANS[config.plan];
   const [isCashModalOpen, setIsCashModalOpen] = useState(false);

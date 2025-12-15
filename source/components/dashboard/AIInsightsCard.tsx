@@ -5,7 +5,7 @@ import PremiumFeature from '@/components/PremiumFeature';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Sparkles, TrendingUp, TrendingDown, Minus, Lightbulb, Wand2 } from 'lucide-react';
+import { Sparkles, Lightbulb, Wand2 } from 'lucide-react';
 import { CreativeStudioModal } from '@/components/marketing/CreativeStudioModal';
 import { InsightType } from '@/services/creativeAI';
 

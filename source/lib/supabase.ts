@@ -10,7 +10,7 @@ export const supabase = createClient(supabaseUrl, supabaseKey);
 
 // Mock helper to simulate database interactions if needed
 export const mockDb = {
-    from: (table: string) => ({
+    from: (_table: string) => ({
         select: () => Promise.resolve({ data: [], error: null }),
         insert: <T>(data: T) => Promise.resolve({ data, error: null }),
         update: <T>(data: T) => Promise.resolve({ data, error: null }),

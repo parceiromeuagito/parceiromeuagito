@@ -1,0 +1,94 @@
+﻿
+C:\Users\Bruno\Desktop\parceirosmeuagito.com\source\components\CashRegisterModal.tsx
+  28:14  warning  'e' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Bruno\Desktop\parceirosmeuagito.com\source\components\ChatSidebar.tsx
+  42:8  warning  React Hook useEffect has a missing dependency: 'activeChatOrder'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+C:\Users\Bruno\Desktop\parceirosmeuagito.com\source\components\Sidebar.tsx
+  41:11  warning  'NavItem' is defined but never used             @typescript-eslint/no-unused-vars
+  55:27  warning  'isAdmin' is assigned a value but never used    @typescript-eslint/no-unused-vars
+  55:36  warning  'isManager' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  55:47  warning  'isCashier' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Bruno\Desktop\parceirosmeuagito.com\source\components\dashboard\AIInsightsCard.tsx
+  8:20  warning  'TrendingUp' is defined but never used    @typescript-eslint/no-unused-vars
+  8:32  warning  'TrendingDown' is defined but never used  @typescript-eslint/no-unused-vars
+  8:46  warning  'Minus' is defined but never used         @typescript-eslint/no-unused-vars
+
+C:\Users\Bruno\Desktop\parceirosmeuagito.com\source\components\orders\OrderDetailsModal.tsx
+  30:18  warning  'e' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Bruno\Desktop\parceirosmeuagito.com\source\components\pos\PaymentModal.tsx
+  182:77  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\Bruno\Desktop\parceirosmeuagito.com\source\components\products\ProductsView.tsx
+  11:29  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\Bruno\Desktop\parceirosmeuagito.com\source\components\ui\badge.tsx
+  35:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+C:\Users\Bruno\Desktop\parceirosmeuagito.com\source\components\ui\button.tsx
+  55:18  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+C:\Users\Bruno\Desktop\parceirosmeuagito.com\source\contexts\AppContext.tsx
+   74:41  warning  'password' is defined but never used. Allowed unused args must match /^_/u                                                      @typescript-eslint/no-unused-vars
+  166:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+C:\Users\Bruno\Desktop\parceirosmeuagito.com\source\contexts\NotificationContext.tsx
+   85:8   warning  React Hook useEffect has a missing dependency: 'addNotification'. Either include it or remove the dependency array              react-hooks/exhaustive-deps
+  103:14  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+C:\Users\Bruno\Desktop\parceirosmeuagito.com\source\contexts\OrderContext.tsx
+   93:8   warning  React Hook React.useEffect has a missing dependency: 'updateOrderStatus'. Either include it or remove the dependency array      react-hooks/exhaustive-deps
+  226:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+C:\Users\Bruno\Desktop\parceirosmeuagito.com\source\contexts\PartnerContext.tsx
+  208:7   warning  'INITIAL_ORDERS' is assigned a value but never used                                                                             @typescript-eslint/no-unused-vars
+  760:14  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+C:\Users\Bruno\Desktop\parceirosmeuagito.com\source\contexts\SecurityContext.tsx
+   22:14  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+   43:14  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+  212:14  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+  224:14  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+C:\Users\Bruno\Desktop\parceirosmeuagito.com\source\contexts\ToastContext.tsx
+  80:14  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+C:\Users\Bruno\Desktop\parceirosmeuagito.com\source\lib\supabase.ts
+  13:12  warning  'table' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Users\Bruno\Desktop\parceirosmeuagito.com\source\pages\CreativeStudio.tsx
+  2:38  warning  'Sparkles' is defined but never used  @typescript-eslint/no-unused-vars
+  2:48  warning  'Copy' is defined but never used      @typescript-eslint/no-unused-vars
+
+C:\Users\Bruno\Desktop\parceirosmeuagito.com\source\pages\Customers.tsx
+   5:10  warning  'motion' is defined but never used              @typescript-eslint/no-unused-vars
+  11:18  warning  'setFilter' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Bruno\Desktop\parceirosmeuagito.com\source\pages\Login.tsx
+  11:11  warning  'addToast' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Bruno\Desktop\parceirosmeuagito.com\source\pages\Menu.tsx
+  5:29  warning  'Briefcase' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Bruno\Desktop\parceirosmeuagito.com\source\pages\Orders.tsx
+  52:20  warning  'e' is defined but never used                                                                                                          @typescript-eslint/no-unused-vars
+  61:6   warning  React Hook useEffect has missing dependencies: 'addToast' and 'updateOrderStatus'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+
+C:\Users\Bruno\Desktop\parceirosmeuagito.com\source\pages\POS.tsx
+  81:8  warning  React Hook useEffect has missing dependencies: 'clearSale' and 'handleOpenPayment'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+
+C:\Users\Bruno\Desktop\parceirosmeuagito.com\source\pages\ProfileSelect.tsx
+  5:24  warning  'TeamMember' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Bruno\Desktop\parceirosmeuagito.com\source\pages\Settings.tsx
+  168:6    warning  React Hook useEffect has a missing dependency: 'authorize'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  318:113  warning  Unexpected any. Specify a different type                                                                      @typescript-eslint/no-explicit-any
+
+C:\Users\Bruno\Desktop\parceirosmeuagito.com\source\services\aiInsights.ts
+  21:7  warning  'EXTERNAL_CONTEXT' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+Ô£û 41 problems (0 errors, 41 warnings)
+

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Wand2, Send, MapPin, Users, Sparkles, Copy, Image } from 'lucide-react';
+import { Wand2, Send, MapPin, Users, Image } from 'lucide-react';
 import { CreativeAIService, CampaignDraft, InsightType } from '../services/creativeAI';
 import { useBusinessStore } from '../store/useBusinessStore';
 import { useToast } from '../contexts/ToastContext';

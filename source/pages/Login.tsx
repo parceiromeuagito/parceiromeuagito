@@ -8,7 +8,7 @@ import { useToast } from '../contexts/ToastContext';
 const Login = () => {
   const navigate = useNavigate();
   const { login } = useApp();
-  const { addToast } = useToast();
+  const { addToast: _addToast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState('parceiro@meuagito.com');
   const [password, setPassword] = useState('123456');

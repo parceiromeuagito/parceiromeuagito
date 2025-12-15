@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Shield, UserCog, User, ArrowRight, Loader2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useTeamStore, TeamMember, UserRole } from '../store/useTeamStore';
+import { useTeamStore, UserRole } from '../store/useTeamStore';
 import { useSecurity } from '../contexts/SecurityContext';
 import { useToast } from '../contexts/ToastContext';
 

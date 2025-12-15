@@ -17,8 +17,8 @@ export interface OptimizationSuggestion {
     action?: InsightAction;
 }
 
-// Mock de Calendário Externo (Simulado)
-const EXTERNAL_CONTEXT = {
+// Mock de Calendário Externo (Simulado - para uso futuro)
+const _EXTERNAL_CONTEXT = {
     weather: { nextWeekend: 'rainy', temp: 18 },
     holidays: [
         { name: 'Dia dos Namorados', daysUntil: 12 },

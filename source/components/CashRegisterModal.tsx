@@ -25,7 +25,7 @@ const CashRegisterModal = ({ isOpen, onClose }: CashRegisterModalProps) => {
     try {
       printCashReport(cashRegister, config.printer);
       addToast('Relatório enviado para impressora', 'success');
-    } catch (e) {
+    } catch (_e) {
       addToast('Erro ao imprimir relatório', 'error');
     }
   };

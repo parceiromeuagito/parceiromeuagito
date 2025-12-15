@@ -1,14 +1,13 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useCustomerStore } from '../store/useCustomerStore';
 import { formatCurrency, formatDate } from '../lib/utils';
 import { Search, User, Phone, Mail, Star, MoreHorizontal, Filter } from 'lucide-react';
-import { motion } from 'framer-motion';
 import { EmptyState } from '../components/ui/EmptyState';
 
 const Customers = () => {
   const { customers } = useCustomerStore();
   const [searchTerm, setSearchTerm] = useState('');
-  const [filter, setFilter] = useState<'all' | 'vip' | 'active'>('all');
+  const [filter, _setFilter] = useState<'all' | 'vip' | 'active'>('all');
 
   const filteredCustomers = customers.filter(c => {
     const matchesSearch = c.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
