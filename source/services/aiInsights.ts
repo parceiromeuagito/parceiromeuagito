@@ -7,7 +7,7 @@ export type TimeRange = '7d' | '30d';
 export interface InsightAction {
     label: string;
     type: 'discount' | 'stock' | 'staff' | 'marketing';
-    payload?: any;
+    payload?: Record<string, unknown>;
 }
 
 export interface OptimizationSuggestion {

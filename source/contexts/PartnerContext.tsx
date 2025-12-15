@@ -64,7 +64,7 @@ export interface PartnerOrder {
   paymentMethod: string;
   type: 'delivery' | 'pickup' | 'table' | 'booking' | 'event' | 'stay';
   scheduledFor?: string;
-  details?: any; // Para armazenar dados específicos (check-in, check-out, mesa, etc)
+  details?: Record<string, unknown>; // Para armazenar dados específicos (check-in, check-out, mesa, etc)
   createdAt: string; // ISO Date String
 }
 

@@ -2,7 +2,8 @@ import ReactECharts from 'echarts-for-react';
 import {
   Users, Clock, DollarSign,
   Activity, CalendarCheck, BedDouble, Layers,
-  Download, FileText, Ticket, UtensilsCrossed, Truck
+  Download, FileText, Ticket, UtensilsCrossed, Truck,
+  LucideIcon
 } from 'lucide-react';
 import { formatCurrency } from '../lib/utils';
 import { useBusinessStore, getBusinessContext } from '../store/useBusinessStore';
@@ -12,7 +13,16 @@ import PremiumFeature from '../components/PremiumFeature';
 import { useToast } from '../contexts/ToastContext';
 import { AIInsightsCard } from '../components/dashboard/AIInsightsCard';
 
-const StatCard = ({ title, value, subtext, icon: Icon, trend }: any) => (
+interface StatCardProps {
+  title: string;
+  value: string | number;
+  subtext: string;
+  icon: LucideIcon;
+  trend?: string;
+  color?: string;
+}
+
+const StatCard = ({ title, value, subtext, icon: Icon, trend }: StatCardProps) => (
   <motion.div
     whileHover={{ y: -2 }}
     className="bg-zinc-900/50 backdrop-blur-sm p-6 rounded-2xl border border-zinc-800/50 hover:border-zinc-700 transition-all duration-300"

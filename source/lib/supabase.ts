@@ -12,8 +12,8 @@ export const supabase = createClient(supabaseUrl, supabaseKey);
 export const mockDb = {
     from: (table: string) => ({
         select: () => Promise.resolve({ data: [], error: null }),
-        insert: (data: any) => Promise.resolve({ data, error: null }),
-        update: (data: any) => Promise.resolve({ data, error: null }),
+        insert: <T>(data: T) => Promise.resolve({ data, error: null }),
+        update: <T>(data: T) => Promise.resolve({ data, error: null }),
         delete: () => Promise.resolve({ error: null }),
     })
 };

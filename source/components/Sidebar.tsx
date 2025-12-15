@@ -26,6 +26,7 @@ import {
   User,
   Shield,
   UserCog,
+  LucideIcon,
 } from 'lucide-react';
 import { useState } from 'react';
 import CashRegisterModal from './CashRegisterModal';
@@ -38,7 +39,7 @@ interface SidebarProps {
 }
 
 interface NavItem {
-  icon: any;
+  icon: LucideIcon;
   label: string;
   path: string;
   badge?: number;

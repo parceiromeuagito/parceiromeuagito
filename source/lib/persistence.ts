@@ -7,7 +7,7 @@ export const loadData = <T>(key: string, fallback: T): T => {
     }
 };
 
-export const saveData = (key: string, data: any) => {
+export const saveData = <T>(key: string, data: T): void => {
     try {
         localStorage.setItem(key, JSON.stringify(data));
     } catch (e) {

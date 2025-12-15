@@ -27,7 +27,7 @@ export interface Order {
     paymentMethod: string;
     type: ServiceType;
     scheduledFor?: string;
-    details?: any;
+    details?: Record<string, unknown>;
     messages: OrderMessage[];
 }
 
@@ -86,7 +86,7 @@ export function OrderProvider({ children }: { children: ReactNode }) {
             if (order.status === 'pending') {
                 const service = services.find(s => s.id === order.type);
                 if (service?.autoAccept) {
-                    updateOrderStatus(order.id, 'accepted');
+                    updateOrderStatus(order.id, 'preparing');
                 }
             }
         });

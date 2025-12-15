@@ -6,7 +6,8 @@ import {
   UtensilsCrossed, BedDouble, Ticket, Calendar,
   ShoppingBag, Truck, CheckCircle2, Building2,
   Globe, AlertTriangle, Link as LinkIcon, Printer,
-  FileText, Type, Copy, Layers
+  FileText, Type, Copy, Layers,
+  LucideIcon
 } from 'lucide-react';
 import { useToast } from '../contexts/ToastContext';
 import { formatCurrency } from '../lib/utils';
@@ -26,7 +27,7 @@ const BusinessTypeCard = ({
 }: {
   type: BusinessType;
   isSelected: boolean;
-  icon: any;
+  icon: LucideIcon;
   onClick: () => void
 }) => {
   return (

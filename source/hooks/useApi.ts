@@ -65,10 +65,17 @@ export function useUpdateOrder() {
 export function useCreateOrder() {
   const queryClient = useQueryClient();
 
+  interface OrderInput {
+    customerName: string;
+    items: string[];
+    total: number;
+    status?: string;
+  }
+
   return useMutation({
-    mutationFn: async (orderData: any) => {
+    mutationFn: async (orderData: OrderInput) => {
       await new Promise(resolve => setTimeout(resolve, 1000));
-      return { id: Math.random().toString(), ...orderData };
+      return { id: Math.random().toString(), createdAt: new Date().toISOString(), ...orderData };
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['orders'] });
